@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-//@RequestMapping(value = "/house")
+@RequestMapping(value = "/house")
 public class HouseController {
 
     @Autowired
@@ -24,7 +24,7 @@ public class HouseController {
     }
 
     @GetMapping("")
-    public String show() {
-        return "Spring boot service";
+    public String show(){
+      return "Spring boot service";
     };
 }
