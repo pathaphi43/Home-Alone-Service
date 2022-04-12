@@ -1,12 +1,13 @@
 package com.csproject.homealoneservice.dto;
 
 public class UserDTO {
+    private int Id;
 
     private String Username;
 
     private String Password;
 
-    private int Status;
+    private Integer Status;
 
     public UserDTO(String username, String password) {
         Username = username;
@@ -14,6 +15,14 @@ public class UserDTO {
     }
 
     public UserDTO() {
+    }
+
+    public Integer getId() {
+        return Id;
+    }
+
+    public void setId(Integer id) {
+        Id = id;
     }
 
     public String getUsername() {

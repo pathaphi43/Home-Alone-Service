@@ -5,9 +5,7 @@ package com.csproject.homealoneservice.controllers;
 import com.csproject.homealoneservice.entity.HouseEntity;
 import com.csproject.homealoneservice.service.HouseService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,4 +25,9 @@ public class HouseController {
     public String show(){
       return "Spring boot service";
     };
+
+    @GetMapping("/search/{name}")
+    public Iterable<HouseEntity> findBynames(@PathVariable("name") String name) {
+        return houseService.findByname(name);
+    }
 }

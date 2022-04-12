@@ -48,9 +48,10 @@ public class UserController {
             UserDTO user = new UserDTO();
             user.setUsername(manager.get().getManagerUsername());
             user.setStatus(manager.get().getManagerStatus());
+            user.setId(manager.get().getMid());
             if (passwordEncoder.matches(userDTO.getPassword(),manager.get().getManagerPassword())){
               String token = JWT.create()
-                      .withClaim("id",user.getUsername())
+                      .withClaim("id",user.getId())
                       .withClaim("status",user.getStatus())
                       .sign(algorithm);
                 return new ResponseEntity<>(token, HttpStatus.OK);
@@ -60,9 +61,10 @@ public class UserController {
             UserDTO user = new UserDTO();
             user.setUsername(tenant.get().getTenantUsername());
             user.setStatus(tenant.get().getTenantStatus());
+            user.setId(tenant.get().getTid());
             if (passwordEncoder.matches(userDTO.getPassword(),tenant.get().getTenantPassword())){
                 String token = JWT.create()
-                        .withClaim("id",user.getUsername())
+                        .withClaim("id",user.getId())
                         .withClaim("status",user.getStatus())
                         .sign(algorithm);
                 return new ResponseEntity<>(token, HttpStatus.OK);

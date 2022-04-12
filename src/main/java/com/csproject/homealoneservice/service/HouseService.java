@@ -21,5 +21,7 @@ public class HouseService {
        return houseRepository.findAll();
     }
 
-
+    public  List<HouseEntity> findByname(String name){
+        return houseRepository.findByHouseName(name);
+    }
 }

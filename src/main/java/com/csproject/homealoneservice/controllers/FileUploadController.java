@@ -8,13 +8,19 @@ import org.apache.commons.net.ftp.FTPClientConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.management.MBeanServerConnection;
+import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
 import java.io.File;
+import java.nio.channels.Channel;
 
 
 @RestController
@@ -30,9 +36,38 @@ public class FileUploadController {
         return "FileUploadController";
     };
 
+
+//    private FakeFtpServer fakeFtpServer;
+//
+//
+//    private FtpClient ftpClient;
+//
+//    @Before
+//    public void setup() throws IOException {
+//        fakeFtpServer = new FakeFtpServer();
+//        fakeFtpServer.addUserAccount(new UserAccount("user", "password", "/data"));
+//
+//        FileSystem fileSystem = new UnixFakeFileSystem();
+//        fileSystem.add(new DirectoryEntry("/data"));
+//        fileSystem.add(new FileEntry("/data/foobar.txt", "abcdef 1234567890"));
+//        fakeFtpServer.setFileSystem(fileSystem);
+//        fakeFtpServer.setServerControlPort(0);
+//
+//        fakeFtpServer.start();
+//
+//        ftpClient = new FtpClient("localhost", fakeFtpServer.getServerControlPort(), "user", "password");
+//        ftpClient.open();
+//    }
+//
+//    @After
+//    public void teardown() throws IOException {
+//        ftpClient.close();
+//        fakeFtpServer.stop();
+//    }
+
+
     @PostMapping(value  ="/upload",consumes = "multipart/form-data")
-    public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile[] file,
-                                                          RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile[] file) {
 
 //        String FTP_ADDRESS = configuration.getFTPHost();
 //        int port = configuration.getFTPPort();
@@ -40,14 +75,14 @@ public class FileUploadController {
 //        String PSW = configuration.getFTPPassword();
 
 
-        FTPClient con;
         System.out.println("File Size "+file.length);
         try {
-            con = new FTPClient();
+            FTPClient con = new FTPClient();
             con.setConnectTimeout(60000);
             logger.info("Connecting");
             con.connect(configuration.getFTPHost(),configuration.getFTPPort());
-            if (con.login(configuration.getFTPUsername(),configuration.getFTPPassword())) {
+            con.login(configuration.getFTPUsername(),configuration.getFTPPassword());
+            if (con.isConnected()) {
                 logger.info("Connected");
                 con.enterLocalPassiveMode(); // important!
 
