@@ -15,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/manager")
 public class ManagerController {
@@ -32,26 +34,24 @@ public class ManagerController {
         return "ManagerContoller";
     }
 
+    @GetMapping(value = "all")
+    public List<ManagerEntity> findManagerAll(){
+        return managerService.findManagerAll();
+    }
+
+    @GetMapping(value = "/id/{id}")
+    public ResponseEntity<ManagerEntity> findManagerId(@PathVariable("id") Integer id){
+        return new ResponseEntity(managerService.findManagerById(id),HttpStatus.OK);
+    }
+
     @PostMapping(value = "/signup",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<ManagerEntity> signUp(@RequestBody ManagerEntity managerBody){
-        ManagerEntity manager = new ManagerEntity();
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        if(!managerService.findManager(managerBody.getManagerUsername()).isPresent()){
-        manager.setManagerUsername(managerBody.getManagerUsername());
-        manager.setManagerPassword(passwordEncoder.encode(managerBody.getManagerPassword()));
-        manager.setManagerFirstname(managerBody.getManagerFirstname());
-        manager.setManagerLastname(managerBody.getManagerLastname());
-        manager.setManagerOffice(managerBody.getManagerOffice());
-        manager.setManagerFacebook(managerBody.getManagerFacebook());
-        manager.setManagerLineid(managerBody.getManagerLineid());
-        manager.setManagerPhone(managerBody.getManagerPhone());
-        manager.setManagerImage("http://homealone.comsciproject.com/img/local_avatar.png");
-        manager.setManagerStatus(0);
-        managerService.saveManager(manager);
-            return new ResponseEntity<>(manager, HttpStatus.OK);
-        }else  return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        ManagerEntity result = managerService.saveManager(managerBody);
+       if( result != null){
+           return new ResponseEntity(result,HttpStatus.OK);
+       }else return new ResponseEntity("สมัครสมาชิกไม่สำเร็จ ชื่อผู้ใช้ '"+ managerBody.getManagerUsername() + "' อาจซ้ำกัน!!!", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 
