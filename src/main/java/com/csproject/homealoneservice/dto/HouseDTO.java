@@ -97,6 +97,35 @@ public class HouseDTO {
         this.houseImageList = houseImageList;
     }
 
+    public HouseDTO() {
+    }
+
+    public HouseDTO(int hid, int mid, String houseName, String houseAddress, String houseProvince, String houseDistrict, Integer houseZipcode, String houseImage, String houseType, Integer houseFloors, Integer houseBedroom, Integer houseBathroom, Integer houseLivingroom, Integer houseKitchen, String houseArea, String houseLatitude, String houseLongitude, String houseElectric, String houseWater, Integer houseRent, Integer houseDeposit, Integer houseInsurance, int houseStatus) {
+        this.hid = hid;
+        this.mid = mid;
+        this.houseName = houseName;
+        this.houseAddress = houseAddress;
+        this.houseProvince = houseProvince;
+        this.houseDistrict = houseDistrict;
+        this.houseZipcode = houseZipcode;
+        this.houseImage = houseImage;
+        this.houseType = houseType;
+        this.houseFloors = houseFloors;
+        this.houseBedroom = houseBedroom;
+        this.houseBathroom = houseBathroom;
+        this.houseLivingroom = houseLivingroom;
+        this.houseKitchen = houseKitchen;
+        this.houseArea = houseArea;
+        this.houseLatitude = houseLatitude;
+        this.houseLongitude = houseLongitude;
+        this.houseElectric = houseElectric;
+        this.houseWater = houseWater;
+        this.houseRent = houseRent;
+        this.houseDeposit = houseDeposit;
+        this.houseInsurance = houseInsurance;
+        this.houseStatus = houseStatus;
+    }
+
     public int getHid() {
         return hid;
     }
