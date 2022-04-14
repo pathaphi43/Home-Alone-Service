@@ -27,6 +27,11 @@ public class HouseController {
         return houseService.queryAllHouse();
     }
 
+    @GetMapping("/lazy/{id}")
+    public List<HouseEntity> findAllHouseLazy(@PathVariable("id") int id) {
+        return houseService.findOrderedByHidLimitedTo(id);
+    }
+
     @GetMapping("/search/{name}")
     public ResponseEntity<List<HouseEntity>> findBynames(@PathVariable("name") String name) {
             if(!houseService.findAllHouseByname(name).isEmpty()){
