@@ -28,9 +28,6 @@ public class RentingHouseEntity {
     @Basic
     @Column(name = "renting_image")
     private String rentingImage;
-    @Basic
-    @Column(name = "renting_status")
-    private int rentingStatus;
 
     public int getRid() {
         return rid;
@@ -88,14 +85,6 @@ public class RentingHouseEntity {
         this.rentingImage = rentingImage;
     }
 
-    public int getRentingStatus() {
-        return rentingStatus;
-    }
-
-    public void setRentingStatus(int rentingStatus) {
-        this.rentingStatus = rentingStatus;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -113,8 +102,6 @@ public class RentingHouseEntity {
             return false;
         if (rentingImage != null ? !rentingImage.equals(that.rentingImage) : that.rentingImage != null) return false;
 
-        if (rentingStatus != that.rentingStatus) return false;
-
         return true;
     }
 
@@ -127,7 +114,6 @@ public class RentingHouseEntity {
         result = 31 * result + (rentingCheckIn != null ? rentingCheckIn.hashCode() : 0);
         result = 31 * result + (rentingCheckOut != null ? rentingCheckOut.hashCode() : 0);
         result = 31 * result + (rentingImage != null ? rentingImage.hashCode() : 0);
-        result = 31 * result + rentingStatus;
         return result;
     }
 }

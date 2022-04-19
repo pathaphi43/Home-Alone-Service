@@ -23,10 +23,6 @@ public interface HouseRepository extends JpaRepository<HouseEntity, Integer>,Hou
 
     List<HouseEntity> findByMid(int id);
 
-    List<HouseEntity> findAllByHouseStatusIs(Integer status);
-
-    List<HouseEntity> findAllByMidAndHouseStatusIs(Integer mid,Integer status);
-
     List<HouseEntity> findByHouseNameContainingIgnoreCase(String name);
 
     List<HouseEntity> findAll(Specification<HouseEntity> specification);

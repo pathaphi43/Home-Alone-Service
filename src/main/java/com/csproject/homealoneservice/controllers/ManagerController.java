@@ -3,7 +3,6 @@ package com.csproject.homealoneservice.controllers;
 import com.csproject.homealoneservice.configurations.Configuration;
 import com.csproject.homealoneservice.dao.ManagerRepository;
 import com.csproject.homealoneservice.entity.ManagerEntity;
-import com.csproject.homealoneservice.service.FileUpload;
 import com.csproject.homealoneservice.service.ManagerService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -30,9 +28,6 @@ public class ManagerController {
 
     @Autowired
     Configuration configuration;
-
-    @Autowired
-    FileUpload fileUpload;
 
 
     @GetMapping(value = "")
@@ -49,16 +44,6 @@ public class ManagerController {
     public ResponseEntity<ManagerEntity> findManagerId(@PathVariable("id") Integer id){
         return new ResponseEntity(managerService.findManagerById(id),HttpStatus.OK);
     }
-
-//    @PostMapping(value = "/upload/profile",
-//            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE},
-//            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-//    public ResponseEntity<ManagerEntity> uploadProfile(@RequestParam("managerId") String managerId, @RequestParam("file") MultipartFile file){
-////        List<MultipartFile> result = fileUpload.handleFileUpload(file);
-//        if(!file.isEmpty()){
-//            return new ResponseEntity(managerService.saveManagerProfile(managerId,file),HttpStatus.OK);
-//        }else return new ResponseEntity("อัพโหลดไฟล์ไม่สำเร็จ", HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
 
     @PostMapping(value = "/signup",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},

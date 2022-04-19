@@ -1,5 +1,6 @@
 package com.csproject.homealoneservice.controllers;
 
+import com.csproject.homealoneservice.dao.TenantRepository;
 import com.csproject.homealoneservice.entity.ManagerEntity;
 import com.csproject.homealoneservice.entity.TenantEntity;
 import com.csproject.homealoneservice.service.TenantService;
@@ -16,9 +17,6 @@ public class TenantController {
     @Autowired
     TenantService tenantService;
 
-    @GetMapping("")
-    public String show() {return "TenantContoller";};
-
     @GetMapping(value = "/id/{id}")
     public ResponseEntity<ManagerEntity> findManagerId(@PathVariable("id") Integer id){
         return new ResponseEntity(tenantService.findTenantById(id),HttpStatus.OK);
@@ -28,7 +26,7 @@ public class TenantController {
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<TenantEntity> signUp(@RequestBody TenantEntity tenantBody){
-        TenantEntity result = tenantService.saveTenant(tenantBody);
+        TenantEntity result = tenantService.saveManager(tenantBody);
         if( result != null){
             return new ResponseEntity(result, HttpStatus.OK);
         }else return new ResponseEntity("สมัครสมาชิกไม่สำเร็จ ชื่อผู้ใช้ '"+ tenantBody.getTenantUsername() + "' อาจซ้ำกัน!!!", HttpStatus.INTERNAL_SERVER_ERROR);
