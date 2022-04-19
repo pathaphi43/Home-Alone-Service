@@ -9,6 +9,5 @@ import java.util.Optional;
 @Repository
 public interface TenantRepository extends JpaRepository<TenantEntity,Integer> {
 
-
     Optional<TenantEntity> findByTenantUsername(String username);
 }

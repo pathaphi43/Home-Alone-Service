@@ -21,7 +21,7 @@ public interface HouseRepository extends JpaRepository<HouseEntity, Integer>,Hou
 //    @Query("SELECT p FROM house p JOIN FETCH p.roles WHERE p.id = (:id)")
 //    public HouseEntity findByIdAndFetchRolesEagerly(@Param("id") Long id);
 
-
+    List<HouseEntity> findByMid(int id);
 
     List<HouseEntity> findByHouseNameContainingIgnoreCase(String name);
 

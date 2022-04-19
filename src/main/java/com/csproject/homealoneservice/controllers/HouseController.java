@@ -27,6 +27,12 @@ public class HouseController {
         return houseService.queryAllHouse();
     }
 
+    @GetMapping("/manager/{id}")
+    public ResponseEntity<List<HouseEntity>> findAllHouseByManagerId(@PathVariable("id") int id) {
+        return new ResponseEntity(houseService.findByHouseId(id), HttpStatus.OK);
+    }
+
+
     @GetMapping("/lazy/{id}")
     public List<HouseEntity> findAllHouseLazy(@PathVariable("id") int id) {
         return houseService.findOrderedByHidLimitedTo(id);

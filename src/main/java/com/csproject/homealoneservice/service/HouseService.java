@@ -14,6 +14,7 @@ import javax.persistence.PersistenceContext;
 import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class HouseService {
@@ -27,6 +28,10 @@ public class HouseService {
     public List<HouseEntity> findOrderedByHidLimitedTo(int limit) {
         return entityManager.createQuery("SELECT p FROM HouseEntity p ORDER BY p.hid",
                 HouseEntity.class).setMaxResults(limit).getResultList();
+    }
+
+    public List<HouseEntity> findByHouseId(Integer id){
+        return houseRepository.findByMid(id);
     }
 
 //    Session session;

@@ -20,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/manager")
 public class ManagerController {
+
     private final Logger logger = LogManager.getLogger(this.getClass().getName());
 
     @Autowired
