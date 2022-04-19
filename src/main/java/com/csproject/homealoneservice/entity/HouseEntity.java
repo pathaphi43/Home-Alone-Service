@@ -1,10 +1,12 @@
 package com.csproject.homealoneservice.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "house", schema = "comsci_homealone", catalog = "")
-public class HouseEntity {
+public class HouseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "hid")
@@ -75,6 +77,7 @@ public class HouseEntity {
     @Basic
     @Column(name = "house_status")
     private int houseStatus;
+
 
     public int getHid() {
         return hid;
