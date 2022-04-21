@@ -15,4 +15,6 @@ public interface ManagerRepository extends JpaRepository<ManagerEntity,Integer> 
     Optional<ManagerEntity> findByManagerUsername(String username);
 
 
+    void deleteById(Integer integer);
+
 }

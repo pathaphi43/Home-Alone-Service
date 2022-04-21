@@ -27,6 +27,11 @@ public class HouseController {
         return houseService.queryAllHouse();
     }
 
+    @GetMapping("/AllAndImage")
+    public ResponseEntity<List<HouseDTO>> findHouseAndImage(){
+        return new ResponseEntity(houseService.queryAllHouseAndImage(), HttpStatus.OK);
+    }
+
     @GetMapping("/manager/{id}")
     public ResponseEntity<List<HouseEntity>> findAllHouseByManagerId(@PathVariable("id") int id) {
         return new ResponseEntity(houseService.findByHouseId(id), HttpStatus.OK);

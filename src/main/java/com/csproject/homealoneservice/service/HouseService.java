@@ -3,8 +3,10 @@ package com.csproject.homealoneservice.service;
 import com.csproject.homealoneservice.dao.HouseRepository;
 import com.csproject.homealoneservice.dao.HouseSpecification;
 import com.csproject.homealoneservice.dao.ManagerRepository;
+import com.csproject.homealoneservice.dao.RentalHouseImageRepository;
 import com.csproject.homealoneservice.dto.HouseDTO;
 import com.csproject.homealoneservice.entity.HouseEntity;
+import com.csproject.homealoneservice.entity.RentalHouseImageEntity;
 import com.mysql.cj.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,9 @@ public class HouseService {
     @Autowired
     HouseRepository houseRepository;
 
+    @Autowired
+    RentalHouseImageRepository rentalHouseImageRepository;
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -30,11 +35,32 @@ public class HouseService {
                 HouseEntity.class).setMaxResults(limit).getResultList();
     }
 
+    public List<HouseDTO> queryAllHouseAndImage(){
+        List<HouseDTO> houseDTO = new ArrayList<>();
+        Iterable<HouseEntity> houses= queryAllHouse();
+        for (HouseEntity house:houses){                                                                          zz
+           houseDTO.add(new HouseDTO(house.getHid(),house.getMid(),house.getHouseName(),house.getHouseAddress(),house.getHouseProvince(),house.getHouseDistrict(),house.getHouseZipcode(),
+                   house.getHouseImage(),house.getHouseType(),house.getHouseFloors(),house.getHouseBedroom(),house.getHouseBathroom(),house.getHouseLivingroom(),house.getHouseKitchen(),house.getHouseArea(),
+                   house.getHouseLatitude(),house.getHouseLongitude(),house.getHouseElectric(),house.getHouseWater(),house.getHouseRent(),house.getHouseDeposit(),house.getHouseInsurance(),house.getHouseStatus(),
+                   rentalHouseImageRepository.findByHid(house.getHid())));
+        }
+        return houseDTO;
+    }
+
     public List<HouseEntity> findByHouseId(Integer id){
         return houseRepository.findByMid(id);
     }
 
-//    Session session;
+
+    public Iterable<HouseEntity> queryAllHouse() {
+        return houseRepository.findAll();
+    }
+
+    public List<HouseEntity> findAllHouseByname(String name) {
+        return houseRepository.findAll(HouseSpecification.likeHouseName(name));
+    }
+
+    //    Session session;
 //    EntityManagerFactory emfactory = Persistence.createEntityManagerFactory( "Eclipselink_JPA" );
 //    EntityManager em = emfactory.createEntityManager();
 //
@@ -49,12 +75,4 @@ public class HouseService {
 
 //Pageable pageable = new OffsetBasedPageRequest(offset, limit);
 //   return this.dataServices.findAllInclusive(pageable);
-
-    public Iterable<HouseEntity> queryAllHouse() {
-        return houseRepository.findAll();
-    }
-
-    public List<HouseEntity> findAllHouseByname(String name) {
-        return houseRepository.findAll(HouseSpecification.likeHouseName(name));
-    }
 }
