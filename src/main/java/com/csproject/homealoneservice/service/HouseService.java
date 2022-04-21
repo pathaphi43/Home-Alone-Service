@@ -38,7 +38,7 @@ public class HouseService {
     public List<HouseDTO> queryAllHouseAndImage(){
         List<HouseDTO> houseDTO = new ArrayList<>();
         Iterable<HouseEntity> houses= queryAllHouse();
-        for (HouseEntity house:houses){                                                                          zz
+        for (HouseEntity house:houses){
            houseDTO.add(new HouseDTO(house.getHid(),house.getMid(),house.getHouseName(),house.getHouseAddress(),house.getHouseProvince(),house.getHouseDistrict(),house.getHouseZipcode(),
                    house.getHouseImage(),house.getHouseType(),house.getHouseFloors(),house.getHouseBedroom(),house.getHouseBathroom(),house.getHouseLivingroom(),house.getHouseKitchen(),house.getHouseArea(),
                    house.getHouseLatitude(),house.getHouseLongitude(),house.getHouseElectric(),house.getHouseWater(),house.getHouseRent(),house.getHouseDeposit(),house.getHouseInsurance(),house.getHouseStatus(),
