@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/house")
 public class HouseController {
-    //Test
+
     @Autowired
     HouseService houseService;
 
@@ -25,6 +25,11 @@ public class HouseController {
     @GetMapping("/all")
     public Iterable<HouseEntity> findAllHouse() {
         return houseService.queryAllHouse();
+    }
+
+    @GetMapping("/AllAndImage")
+    public ResponseEntity<List<HouseDTO>> findHouseAndImage(){
+        return new ResponseEntity(houseService.queryAllHouseAndImage(), HttpStatus.OK);
     }
 
     @GetMapping("/manager/{id}")
