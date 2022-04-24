@@ -47,6 +47,41 @@ public class HouseService {
         return houseDTO;
     }
 
+
+    public HouseDTO queryHouseAndImage(Integer id){
+        HouseDTO houseDTO = new HouseDTO();
+        Optional<HouseEntity> houses = findById(id);
+        if(houses.isPresent()){
+            houseDTO.setHid(houses.get().getHid());
+            houseDTO.setMid(houses.get().getMid());
+            houseDTO.setHouseName(houses.get().getHouseName());
+            houseDTO.setHouseArea(houses.get().getHouseArea());
+            houseDTO.setHouseAddress(houses.get().getHouseAddress());
+            houseDTO.setHouseImage(houses.get().getHouseImage());
+            houseDTO.setHouseBathroom(houses.get().getHouseBedroom());
+            houseDTO.setHouseBedroom(houses.get().getHouseBedroom());
+            houseDTO.setHouseProvince(houses.get().getHouseProvince());
+            houseDTO.setHouseDistrict(houses.get().getHouseDistrict());
+            houseDTO.setHouseZipcode(houses.get().getHouseZipcode());
+            houseDTO.setHouseFloors(houses.get().getHouseFloors());
+            houseDTO.setHouseKitchen(houses.get().getHouseKitchen());
+            houseDTO.setHouseLivingroom(houses.get().getHouseLivingroom());
+            houseDTO.setHouseType(houses.get().getHouseType());
+            houseDTO.setHouseWater(houses.get().getHouseWater());
+            houseDTO.setHouseElectric(houses.get().getHouseElectric());
+            houseDTO.setHouseLatitude(houses.get().getHouseLatitude());
+            houseDTO.setHouseLongitude(houses.get().getHouseLongitude());
+            houseDTO.setHouseRent(houses.get().getHouseRent());
+            houseDTO.setHouseInsurance(houses.get().getHouseInsurance());
+            houseDTO.setHouseDeposit(houses.get().getHouseDeposit());
+            houseDTO.setHouseStatus(houses.get().getHouseStatus());
+            houseDTO.setHouseImageList(rentalHouseImageRepository.findByHid(houses.get().getHid()));
+            return houseDTO;
+        }else return null;
+
+    }
+    public Optional<HouseEntity> findById(Integer id){return houseRepository.findById(id);}
+
     public List<HouseEntity> findByHouseId(Integer id){
         return houseRepository.findByMid(id);
     }

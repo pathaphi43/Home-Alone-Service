@@ -4,13 +4,9 @@ import com.csproject.homealoneservice.dao.ManagerRepository;
 import com.csproject.homealoneservice.dao.TenantRepository;
 import com.csproject.homealoneservice.entity.ManagerEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.web.context.request.WebRequest;
 
 import java.util.List;
 import java.util.Optional;
