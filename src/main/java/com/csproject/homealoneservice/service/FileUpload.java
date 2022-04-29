@@ -30,10 +30,10 @@ public class FileUpload {
         System.out.println("File Size "+file);
         try {
             FTPClient con = new FTPClient();
-            con.setConnectTimeout(60000);
-            con.getReplyString();
+//            con.setConnectTimeout(60000);
 
-            System.out.println("Connecting");
+
+            System.out.println("Connecting:"+con.getReplyString());
             System.out.println(configuration.getFTPHost()+":"+configuration.getFTPPort() +"\n"+ configuration.getFTPUsername() + configuration.getFTPPassword());
             con.connect(configuration.getFTPHost(),configuration.getFTPPort());
             System.out.println("Reply :"+con.getReplyString());
