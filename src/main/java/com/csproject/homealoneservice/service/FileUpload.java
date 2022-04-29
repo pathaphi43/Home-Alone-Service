@@ -25,8 +25,7 @@ public class FileUpload {
 //        int port = configuration.getFTPPort();
 //        String LOGIN = configuration.getFTPUsername();
 //        String PSW = configuration.getFTPPassword();
-        FTPClientConfig config = new FTPClientConfig();
-
+//        FTPClientConfig config = new FTPClientConfig();
 
         System.out.println("File Size "+file);
         try {
@@ -38,7 +37,7 @@ public class FileUpload {
             System.out.println(configuration.getFTPHost()+":"+configuration.getFTPPort() +"\n"+ configuration.getFTPUsername() + configuration.getFTPPassword());
             con.connect(configuration.getFTPHost(),configuration.getFTPPort());
             System.out.println("Reply :"+con.getReplyString());
-            System.out.println("TIME :"+config.getServerTimeZoneId());
+//            System.out.println("TIME :"+config.getServerTimeZoneId());
             con.login(configuration.getFTPUsername(),configuration.getFTPPassword());
             if (con.isConnected()) {
                 con.enterLocalPassiveMode(); // important!
@@ -57,6 +56,7 @@ public class FileUpload {
                 return null;
             }
         } catch (Exception e) {
+            System.out.println(e);
 //            redirectAttributes.addFlashAttribute("message",
 //                    "Could not upload " + file.getOriginalFilename() + "!");
             System.out.println("Can't Connect");
