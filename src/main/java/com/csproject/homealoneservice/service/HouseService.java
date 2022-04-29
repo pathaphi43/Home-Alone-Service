@@ -7,6 +7,7 @@ import com.csproject.homealoneservice.dao.RentalHouseImageRepository;
 import com.csproject.homealoneservice.dto.HouseDTO;
 import com.csproject.homealoneservice.entity.HouseEntity;
 import com.csproject.homealoneservice.entity.RentalHouseImageEntity;
+import com.csproject.homealoneservice.enumeration.HouseEnum;
 import com.mysql.cj.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,33 @@ public class HouseService {
         return houseDTO;
     }
 
+    public  HouseEntity insertHouse(HouseEntity houseBody){
+        HouseEntity house = new HouseEntity();
+        house.setMid(houseBody.getMid());
+        house.setHouseName(houseBody.getHouseName());
+        house.setHouseAddress(houseBody.getHouseAddress());
+        house.setHouseProvince(houseBody.getHouseProvince());
+        house.setHouseDistrict(houseBody.getHouseDistrict());
+        house.setHouseZipcode(house.getHouseZipcode());
+        house.setHouseImage(HouseEnum.HOUSE_FIRST_INSERT.getImagePath());
+        house.setHouseType(houseBody.getHouseType());
+        house.setHouseFloors(houseBody.getHouseFloors());
+        house.setHouseBedroom(houseBody.getHouseBedroom());
+        house.setHouseBathroom(houseBody.getHouseBathroom());
+        house.setHouseLivingroom(houseBody.getHouseLivingroom());
+        house.setHouseKitchen(houseBody.getHouseKitchen());
+        house.setHouseArea(houseBody.getHouseArea());
+        house.setHouseLatitude(houseBody.getHouseLatitude());
+        house.setHouseLongitude(houseBody.getHouseLongitude());
+        house.setHouseElectric(houseBody.getHouseElectric());
+        house.setHouseWater(houseBody.getHouseWater());
+        house.setHouseRent(houseBody.getHouseRent());
+        house.setHouseDeposit(houseBody.getHouseDeposit());
+        house.setHouseInsurance(houseBody.getHouseInsurance());
+        house.setHouseStatus(HouseEnum.HOUSE_FIRST_INSERT.getStatus());
+        return houseRepository.save(house);
+    }
+
 
     public HouseDTO queryHouseAndImage(Integer id){
         HouseDTO houseDTO = new HouseDTO();
@@ -80,6 +108,7 @@ public class HouseService {
         }else return null;
 
     }
+
     public Optional<HouseEntity> findById(Integer id){return houseRepository.findById(id);}
 
     public List<HouseEntity> findByHouseId(Integer id){
