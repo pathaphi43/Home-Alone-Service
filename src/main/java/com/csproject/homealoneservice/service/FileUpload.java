@@ -3,6 +3,7 @@ package com.csproject.homealoneservice.service;
 import com.csproject.homealoneservice.configurations.Configuration;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPClientConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,15 +25,20 @@ public class FileUpload {
 //        int port = configuration.getFTPPort();
 //        String LOGIN = configuration.getFTPUsername();
 //        String PSW = configuration.getFTPPassword();
+        FTPClientConfig config = new FTPClientConfig();
 
 
         System.out.println("File Size "+file);
         try {
             FTPClient con = new FTPClient();
             con.setConnectTimeout(60000);
+            con.getReplyString();
+
             System.out.println("Connecting");
             System.out.println(configuration.getFTPHost()+":"+configuration.getFTPPort() +"\n"+ configuration.getFTPUsername() + configuration.getFTPPassword());
             con.connect(configuration.getFTPHost(),configuration.getFTPPort());
+            System.out.println("Reply :"+con.getReplyString());
+            System.out.println("TIME :"+config.getServerTimeZoneId());
             con.login(configuration.getFTPUsername(),configuration.getFTPPassword());
             if (con.isConnected()) {
                 con.enterLocalPassiveMode(); // important!
