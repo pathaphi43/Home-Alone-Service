@@ -31,6 +31,7 @@ public class FileUpload {
             FTPClient con = new FTPClient();
             con.setConnectTimeout(60000);
             System.out.println("Connecting");
+            System.out.println(configuration.getFTPHost()+":"+configuration.getFTPPort() +"\n"+ configuration.getFTPUsername() + configuration.getFTPPassword());
             con.connect(configuration.getFTPHost(),configuration.getFTPPort());
             con.login(configuration.getFTPUsername(),configuration.getFTPPassword());
             if (con.isConnected()) {
