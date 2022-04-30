@@ -33,6 +33,11 @@ public class HouseController {
         return new ResponseEntity(houseService.queryAllHouseAndImage(), HttpStatus.OK);
     }
 
+    @GetMapping("/AllAndImageAndStatus")
+    public ResponseEntity<List<HouseDTO>> findHouseAndImageAndStatus(){
+        return new ResponseEntity(houseService.queryAllHouseAndImageAndStatus(), HttpStatus.OK);
+    }
+
     @GetMapping("/HouseAndImage/{id}")
     public ResponseEntity<HouseDTO> findHouseAndImage(@PathVariable("id") int id) {
         return new ResponseEntity(houseService.queryHouseAndImage(id), HttpStatus.OK);

@@ -48,6 +48,19 @@ public class HouseService {
         return houseDTO;
     }
 
+    public List<HouseDTO> queryAllHouseAndImageAndStatus(){
+        List<HouseDTO> houseDTO = new ArrayList<>();
+        List<HouseEntity> houses = houseRepository.findAllByHouseStatusIs(HouseEnum.HOUSE_FIRST_INSERT.getStatus());
+        for (HouseEntity house:houses){
+            houseDTO.add(new HouseDTO(house.getHid(),house.getMid(),house.getHouseName(),house.getHouseAddress(),house.getHouseProvince(),house.getHouseDistrict(),house.getHouseZipcode(),
+                    house.getHouseImage(),house.getHouseType(),house.getHouseFloors(),house.getHouseBedroom(),house.getHouseBathroom(),house.getHouseLivingroom(),house.getHouseKitchen(),house.getHouseArea(),
+                    house.getHouseLatitude(),house.getHouseLongitude(),house.getHouseElectric(),house.getHouseWater(),house.getHouseRent(),house.getHouseDeposit(),house.getHouseInsurance(),house.getHouseStatus(),
+                    rentalHouseImageRepository.findByHid(house.getHid())));
+        }
+        return houseDTO;
+    }
+
+
     public  HouseEntity insertHouse(HouseEntity houseBody){
         HouseEntity house = new HouseEntity();
         house.setMid(houseBody.getMid());
@@ -108,6 +121,8 @@ public class HouseService {
         }else return null;
 
     }
+
+
 
     public Optional<HouseEntity> findById(Integer id){return houseRepository.findById(id);}
 
