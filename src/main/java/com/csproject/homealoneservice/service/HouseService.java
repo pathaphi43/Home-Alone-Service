@@ -60,7 +60,6 @@ public class HouseService {
         return houseDTO;
     }
 
-
     public  HouseEntity insertHouse(HouseEntity houseBody){
         HouseEntity house = new HouseEntity();
         house.setMid(houseBody.getMid());
@@ -87,7 +86,6 @@ public class HouseService {
         house.setHouseStatus(HouseEnum.HOUSE_FIRST_INSERT.getStatus());
         return houseRepository.save(house);
     }
-
 
     public HouseDTO queryHouseAndImage(Integer id){
         HouseDTO houseDTO = new HouseDTO();
@@ -122,14 +120,11 @@ public class HouseService {
 
     }
 
-
-
     public Optional<HouseEntity> findById(Integer id){return houseRepository.findById(id);}
 
     public List<HouseEntity> findByHouseId(Integer id){
         return houseRepository.findByMid(id);
     }
-
 
     public Iterable<HouseEntity> queryAllHouse() {
         return houseRepository.findAll();
@@ -139,19 +134,61 @@ public class HouseService {
         return houseRepository.findAll(HouseSpecification.likeHouseName(name));
     }
 
-    //    Session session;
-//    EntityManagerFactory emfactory = Persistence.createEntityManagerFactory( "Eclipselink_JPA" );
-//    EntityManager em = emfactory.createEntityManager();
-//
-//    public HouseEntity findByHid(int id) {
-//        return em.createQuery("SELECT u FROM HouseEntity AS u JOIN FETCH u.hid WHERE u.hid=:id", HouseEntity.class)
-//                .setParameter("id", id).getSingleResult();
-//    }
-//
-//    List<HouseEntity> users = session.createQuery("From UserLazy").list();
-//    UserLazy userLazyLoaded = users.get(3);
-//        return (userLazyLoaded.getOrderDetail());
+    public HouseEntity rentHouse(Integer id){
+        HouseEntity house = new HouseEntity();
+        house.setHid(id);
+        Optional<HouseEntity> houseEntity= findById(id);
+        house.setMid(houseEntity.get().getMid());
+        house.setHouseName(houseEntity.get().getHouseName());
+        house.setHouseAddress(houseEntity.get().getHouseAddress());
+        house.setHouseProvince(houseEntity.get().getHouseProvince());
+        house.setHouseDistrict(houseEntity.get().getHouseDistrict());
+        house.setHouseZipcode(houseEntity.get().getHouseZipcode());
+        house.setHouseImage(houseEntity.get().getHouseImage());
+        house.setHouseType(houseEntity.get().getHouseType());
+        house.setHouseFloors(houseEntity.get().getHouseFloors());
+        house.setHouseBedroom(houseEntity.get().getHouseBedroom());
+        house.setHouseBathroom(houseEntity.get().getHouseBathroom());
+        house.setHouseLivingroom(houseEntity.get().getHouseLivingroom());
+        house.setHouseKitchen(houseEntity.get().getHouseKitchen());
+        house.setHouseArea(houseEntity.get().getHouseArea());
+        house.setHouseLatitude(houseEntity.get().getHouseLatitude());
+        house.setHouseLongitude(houseEntity.get().getHouseLongitude());
+        house.setHouseElectric(houseEntity.get().getHouseElectric());
+        house.setHouseWater(houseEntity.get().getHouseWater());
+        house.setHouseRent(houseEntity.get().getHouseRent());
+        house.setHouseDeposit(houseEntity.get().getHouseDeposit());
+        house.setHouseInsurance(houseEntity.get().getHouseInsurance());
+        house.setHouseStatus(HouseEnum.HOUSE_RENT.getStatus());
+        return houseRepository.save(house);
+    }
 
-//Pageable pageable = new OffsetBasedPageRequest(offset, limit);
-//   return this.dataServices.findAllInclusive(pageable);
+    public HouseEntity cancelRentHouse(Integer id){
+        HouseEntity house = new HouseEntity();
+        house.setHid(id);
+        Optional<HouseEntity> houseEntity= findById(id);
+        house.setMid(houseEntity.get().getMid());
+        house.setHouseName(houseEntity.get().getHouseName());
+        house.setHouseAddress(houseEntity.get().getHouseAddress());
+        house.setHouseProvince(houseEntity.get().getHouseProvince());
+        house.setHouseDistrict(houseEntity.get().getHouseDistrict());
+        house.setHouseZipcode(houseEntity.get().getHouseZipcode());
+        house.setHouseImage(houseEntity.get().getHouseImage());
+        house.setHouseType(houseEntity.get().getHouseType());
+        house.setHouseFloors(houseEntity.get().getHouseFloors());
+        house.setHouseBedroom(houseEntity.get().getHouseBedroom());
+        house.setHouseBathroom(houseEntity.get().getHouseBathroom());
+        house.setHouseLivingroom(houseEntity.get().getHouseLivingroom());
+        house.setHouseKitchen(houseEntity.get().getHouseKitchen());
+        house.setHouseArea(houseEntity.get().getHouseArea());
+        house.setHouseLatitude(houseEntity.get().getHouseLatitude());
+        house.setHouseLongitude(houseEntity.get().getHouseLongitude());
+        house.setHouseElectric(houseEntity.get().getHouseElectric());
+        house.setHouseWater(houseEntity.get().getHouseWater());
+        house.setHouseRent(houseEntity.get().getHouseRent());
+        house.setHouseDeposit(houseEntity.get().getHouseDeposit());
+        house.setHouseInsurance(houseEntity.get().getHouseInsurance());
+        house.setHouseStatus(HouseEnum.HOUSE_FIRST_INSERT.getStatus());
+        return houseRepository.save(house);
+    }
 }

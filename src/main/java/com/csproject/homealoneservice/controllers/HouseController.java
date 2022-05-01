@@ -38,9 +38,19 @@ public class HouseController {
         return new ResponseEntity(houseService.queryAllHouseAndImageAndStatus(), HttpStatus.OK);
     }
 
-    @GetMapping("/HouseAndImage/{id}")
-    public ResponseEntity<HouseDTO> findHouseAndImage(@PathVariable("id") int id) {
+    @GetMapping("/HouseAndImage")
+    public ResponseEntity<List<HouseDTO>> findHouseAndImages(@PathVariable("id") int id){
         return new ResponseEntity(houseService.queryHouseAndImage(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/rent/{id}")
+    public ResponseEntity<HouseEntity> rentHouse(@PathVariable("id") int id) {
+        return new ResponseEntity(houseService.rentHouse(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/cancelrent/{id}")
+    public ResponseEntity<HouseEntity> cancelRentHouse(@PathVariable("id") int id) {
+        return new ResponseEntity(houseService.cancelRentHouse(id), HttpStatus.OK);
     }
 
     @GetMapping("/manager/{id}")
@@ -52,7 +62,6 @@ public class HouseController {
     public ResponseEntity<HouseEntity> insertHouse(@RequestBody HouseEntity houseBody){
         return new  ResponseEntity<>(houseService.insertHouse(houseBody), HttpStatus.OK);
     }
-
 
     @GetMapping("/lazy/{id}")
     public List<HouseEntity> findAllHouseLazy(@PathVariable("id") int id) {
