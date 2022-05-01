@@ -60,6 +60,18 @@ public class HouseService {
         return houseDTO;
     }
 
+    public List<HouseDTO> queryAllHouseAndImageAndStatusIs(Integer mid,Integer status){
+        List<HouseDTO> houseDTO = new ArrayList<>();
+        List<HouseEntity> houses = houseRepository.findAllByMidAndHouseStatusIs(mid,status);
+        for (HouseEntity house:houses){
+            houseDTO.add(new HouseDTO(house.getHid(),house.getMid(),house.getHouseName(),house.getHouseAddress(),house.getHouseProvince(),house.getHouseDistrict(),house.getHouseZipcode(),
+                    house.getHouseImage(),house.getHouseType(),house.getHouseFloors(),house.getHouseBedroom(),house.getHouseBathroom(),house.getHouseLivingroom(),house.getHouseKitchen(),house.getHouseArea(),
+                    house.getHouseLatitude(),house.getHouseLongitude(),house.getHouseElectric(),house.getHouseWater(),house.getHouseRent(),house.getHouseDeposit(),house.getHouseInsurance(),house.getHouseStatus(),
+                    rentalHouseImageRepository.findByHid(house.getHid())));
+        }
+        return houseDTO;
+    }
+
     public  HouseEntity insertHouse(HouseEntity houseBody){
         HouseEntity house = new HouseEntity();
         house.setMid(houseBody.getMid());

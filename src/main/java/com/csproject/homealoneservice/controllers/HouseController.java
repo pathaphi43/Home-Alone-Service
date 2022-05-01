@@ -58,6 +58,11 @@ public class HouseController {
         return new ResponseEntity(houseService.findByHouseId(id), HttpStatus.OK);
     }
 
+    @PostMapping(value = "/prerent",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<HouseDTO>> queryAllHouseAndImageAndStatusIs(@RequestBody HouseEntity houseBody){
+        return new  ResponseEntity<>(houseService.queryAllHouseAndImageAndStatusIs(houseBody.getMid(),houseBody.getHouseStatus()), HttpStatus.OK);
+    }
+
     @PostMapping(value = "/insert",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<HouseEntity> insertHouse(@RequestBody HouseEntity houseBody){
         return new  ResponseEntity<>(houseService.insertHouse(houseBody), HttpStatus.OK);
