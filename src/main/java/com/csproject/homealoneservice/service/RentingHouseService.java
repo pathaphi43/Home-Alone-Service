@@ -4,6 +4,8 @@ import com.csproject.homealoneservice.dao.RentingHouseRepository;
 import com.csproject.homealoneservice.entity.HouseEntity;
 import com.csproject.homealoneservice.entity.RentingHouseEntity;
 import com.csproject.homealoneservice.enumeration.HouseEnum;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +18,7 @@ import java.util.Optional;
 
 @Service
 public class RentingHouseService {
-
+    private final Logger logger = LogManager.getLogger(this.getClass().getName());
     @Autowired
     RentingHouseRepository rentingHouseRepository;
 
@@ -28,13 +30,11 @@ public class RentingHouseService {
         RentingHouseEntity rentingHouse = new RentingHouseEntity();
         rentingHouse.setHid(hid);
         rentingHouse.setTid(tid);
-        System.out.println(Timestamp.from(ZonedDateTime.now(ZoneId.of("GMT+7")).toInstant()));
-        System.out.println(sdf3.format(Timestamp.from(ZonedDateTime.now().toInstant())));
-        rentingHouse.setRentingBook(Timestamp.from(ZonedDateTime.now(ZoneId.of("GMT+7")).toInstant()));
-
-//        new SimpleDateFormat(this.getFormatDate()).format(new Date())
+        ZoneId zone = ZoneId.systemDefault();
+        System.out.println(zone);
+        logger.info("Time Zone is "+zone);
+        rentingHouse.setRentingBook(Timestamp.from(ZonedDateTime.now(ZoneId.of("Asia/Bangkok")).toInstant()));
         rentingHouse.setRentingStatus(HouseEnum.HOUSE_FIRST_INSERT.getStatus());
-        System.out.println(rentingHouse);
         return rentingHouseRepository.save(rentingHouse);
     }
 
