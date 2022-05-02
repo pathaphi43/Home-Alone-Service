@@ -30,7 +30,8 @@ public class RentingHouseService {
         rentingHouse.setTid(tid);
         System.out.println(Timestamp.from(ZonedDateTime.now(ZoneId.of("GMT+7")).toInstant()));
         System.out.println(sdf3.format(Timestamp.from(ZonedDateTime.now().toInstant())));
-        rentingHouse.setRentingBook(Timestamp.from(ZonedDateTime.now().toInstant()));
+        rentingHouse.setRentingBook(Timestamp.from(ZonedDateTime.now(ZoneId.of("GMT+7")).toInstant()));
+
 //        new SimpleDateFormat(this.getFormatDate()).format(new Date())
         rentingHouse.setRentingStatus(HouseEnum.HOUSE_FIRST_INSERT.getStatus());
         System.out.println(rentingHouse);
