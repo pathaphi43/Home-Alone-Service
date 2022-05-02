@@ -49,15 +49,7 @@ public class HouseController {
         return new ResponseEntity(houseService.queryHouseAndImage(id), HttpStatus.OK);
     }
 
-    @GetMapping("/rent/{id}")
-    public ResponseEntity<HouseEntity> rentHouse(@PathVariable("id") int id) {
-        return new ResponseEntity(houseService.rentHouse(id), HttpStatus.OK);
-    }
 
-    @GetMapping("/cancelrent/{id}")
-    public ResponseEntity<HouseEntity> cancelRentHouse(@PathVariable("id") int id) {
-        return new ResponseEntity(houseService.cancelRentHouse(id), HttpStatus.OK);
-    }
 
     @GetMapping("/manager/{id}")
     public ResponseEntity<List<HouseEntity>> findAllHouseByManagerId(@PathVariable("id") int id) {
@@ -65,16 +57,24 @@ public class HouseController {
     }
 
     @PostMapping(value = "/prerent",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RentingHouseEntity> queryAllHouseAndImageAndStatusIs(@RequestBody RentDTO rentDTO){
+    public ResponseEntity<List<HouseDTO> > queryAllHouseAndImageAndStatusIs(@RequestBody HouseEntity houseBody){
+        return new  ResponseEntity<>(houseService.queryAllHouseAndImageAndStatusIs(houseBody.getMid(),houseBody.getHouseStatus()), HttpStatus.OK);
+    }
+
+    @PostMapping(value ="/rent", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<RentingHouseEntity>  rentHouse(@RequestBody RentDTO rentDTO) {
         return new  ResponseEntity<>(rentingHouseService.rentHouse(rentDTO.getHid(),rentDTO.getTid()), HttpStatus.OK);
+    }
+
+    @GetMapping("/cancelrent/{id}")
+    public ResponseEntity<HouseEntity> cancelRentHouse(@PathVariable("id") int id) {
+        return new ResponseEntity(houseService.cancelRentHouse(id), HttpStatus.OK);
     }
 
     @PostMapping(value = "/insert",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<HouseEntity> insertHouse(@RequestBody HouseEntity houseBody){
         return new  ResponseEntity<>(houseService.insertHouse(houseBody), HttpStatus.OK);
     }
-
-
 
 
     @GetMapping("/lazy/{id}")
