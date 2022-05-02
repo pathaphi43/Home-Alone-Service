@@ -2,8 +2,11 @@ package com.csproject.homealoneservice.controllers;
 
 
 import com.csproject.homealoneservice.dto.HouseDTO;
+import com.csproject.homealoneservice.dto.RentDTO;
 import com.csproject.homealoneservice.entity.HouseEntity;
+import com.csproject.homealoneservice.entity.RentingHouseEntity;
 import com.csproject.homealoneservice.service.HouseService;
+import com.csproject.homealoneservice.service.RentingHouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,6 +22,9 @@ public class HouseController {
 
     @Autowired
     HouseService houseService;
+
+    @Autowired
+    RentingHouseService rentingHouseService;
 
     @GetMapping("")
     public String show() {return "Spring boot service";};
@@ -59,14 +65,17 @@ public class HouseController {
     }
 
     @PostMapping(value = "/prerent",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<HouseDTO>> queryAllHouseAndImageAndStatusIs(@RequestBody HouseEntity houseBody){
-        return new  ResponseEntity<>(houseService.queryAllHouseAndImageAndStatusIs(houseBody.getMid(),houseBody.getHouseStatus()), HttpStatus.OK);
+    public ResponseEntity<RentingHouseEntity> queryAllHouseAndImageAndStatusIs(@RequestBody RentDTO rentDTO){
+        return new  ResponseEntity<>(rentingHouseService.rentHouse(rentDTO.getHid(),rentDTO.getTid()), HttpStatus.OK);
     }
 
     @PostMapping(value = "/insert",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<HouseEntity> insertHouse(@RequestBody HouseEntity houseBody){
         return new  ResponseEntity<>(houseService.insertHouse(houseBody), HttpStatus.OK);
     }
+
+
+
 
     @GetMapping("/lazy/{id}")
     public List<HouseEntity> findAllHouseLazy(@PathVariable("id") int id) {

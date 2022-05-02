@@ -3,7 +3,6 @@ package com.csproject.homealoneservice.enumeration;
 public enum ManagerEnum {
     MANAGER_FIRST_INSERT("http://homealone.comsciproject.com/img/local_avatar.png",0),
     MANAGER_UPLOAD_PROFILE("http://homealone.comsciproject.com/img/",0)
-
     ;
 
     private String imagePath;
