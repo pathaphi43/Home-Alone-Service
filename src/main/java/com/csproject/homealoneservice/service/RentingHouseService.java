@@ -22,6 +22,9 @@ public class RentingHouseService {
     @Autowired
     RentingHouseRepository rentingHouseRepository;
 
+    @Autowired
+    HouseService houseService;
+
     private static Date queryDate;
     private String formatDate = "yyyyMMdd";
     private static final SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -35,7 +38,11 @@ public class RentingHouseService {
         logger.info(Timestamp.valueOf(zdt.toLocalDateTime()));
         rentingHouse.setRentingBook(Timestamp.valueOf(zdt.toLocalDateTime()));
         rentingHouse.setRentingStatus(HouseEnum.HOUSE_FIRST_INSERT.getStatus());
-        return rentingHouseRepository.save(rentingHouse);
+        HouseEntity result = houseService.rentHouse(hid);
+        if (result != null)return rentingHouseRepository.save(rentingHouse);
+        else  return null;
+
+
     }
 
     public void cancelRentHouse(Integer id){
