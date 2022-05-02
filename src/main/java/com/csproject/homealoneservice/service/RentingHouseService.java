@@ -25,16 +25,15 @@ public class RentingHouseService {
     private static Date queryDate;
     private String formatDate = "yyyyMMdd";
     private static final SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    ZoneId zone = ZoneId.of("Asia/Bangkok");
 
     public RentingHouseEntity rentHouse(Integer hid,Integer tid){
         RentingHouseEntity rentingHouse = new RentingHouseEntity();
         rentingHouse.setHid(hid);
         rentingHouse.setTid(tid);
-        ZoneId zone = ZoneId.systemDefault();
-        System.out.println(zone);
         logger.info("Time Zone is "+zone);
-        rentingHouse.setRentingBook(Timestamp.from(ZonedDateTime.now(ZoneId.of("Asia/Bangkok")).toInstant()));
-        logger.info(Timestamp.from(ZonedDateTime.now(ZoneId.of("Asia/Bangkok")).toInstant()));
+        rentingHouse.setRentingBook(Timestamp.from(ZonedDateTime.now(zone).toInstant()));
+        logger.info(Timestamp.from(ZonedDateTime.now(zone).toInstant()));
         rentingHouse.setRentingStatus(HouseEnum.HOUSE_FIRST_INSERT.getStatus());
         return rentingHouseRepository.save(rentingHouse);
     }
