@@ -34,6 +34,7 @@ public class RentingHouseService {
         System.out.println(zone);
         logger.info("Time Zone is "+zone);
         rentingHouse.setRentingBook(Timestamp.from(ZonedDateTime.now(ZoneId.of("Asia/Bangkok")).toInstant()));
+        logger.info(Timestamp.from(ZonedDateTime.now(ZoneId.of("Asia/Bangkok")).toInstant()));
         rentingHouse.setRentingStatus(HouseEnum.HOUSE_FIRST_INSERT.getStatus());
         return rentingHouseRepository.save(rentingHouse);
     }
