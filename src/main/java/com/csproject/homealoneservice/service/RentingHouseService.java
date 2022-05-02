@@ -26,14 +26,14 @@ public class RentingHouseService {
     private String formatDate = "yyyyMMdd";
     private static final SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     ZoneId zone = ZoneId.of("Asia/Bangkok");
+    ZonedDateTime zdt = ZonedDateTime.now(ZoneId.of("Asia/Bangkok"));
 
     public RentingHouseEntity rentHouse(Integer hid,Integer tid){
         RentingHouseEntity rentingHouse = new RentingHouseEntity();
         rentingHouse.setHid(hid);
         rentingHouse.setTid(tid);
-        logger.info("Time Zone is "+zone);
-        rentingHouse.setRentingBook(Timestamp.from(ZonedDateTime.now(zone).toInstant()));
-        logger.info(Timestamp.from(ZonedDateTime.now(zone).toInstant()));
+        logger.info(Timestamp.valueOf(zdt.toLocalDateTime()));
+        rentingHouse.setRentingBook(Timestamp.valueOf(zdt.toLocalDateTime()));
         rentingHouse.setRentingStatus(HouseEnum.HOUSE_FIRST_INSERT.getStatus());
         return rentingHouseRepository.save(rentingHouse);
     }
