@@ -50,15 +50,15 @@ public class ManagerController {
         return new ResponseEntity(managerService.findManagerById(id),HttpStatus.OK);
     }
 
-    @PostMapping(value = "/upload/profile",
-            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ManagerEntity> uploadProfile(@RequestParam("managerId") String managerId, @RequestParam("file") MultipartFile file){
-//        List<MultipartFile> result = fileUpload.handleFileUpload(file);
-        if(!file.isEmpty()){
-            return new ResponseEntity(managerService.saveManagerProfile(managerId,file),HttpStatus.OK);
-        }else return new ResponseEntity("อัพโหลดไฟล์ไม่สำเร็จ", HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+//    @PostMapping(value = "/upload/profile",
+//            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE},
+//            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+//    public ResponseEntity<ManagerEntity> uploadProfile(@RequestParam("managerId") String managerId, @RequestParam("file") MultipartFile file){
+////        List<MultipartFile> result = fileUpload.handleFileUpload(file);
+//        if(!file.isEmpty()){
+//            return new ResponseEntity(managerService.saveManagerProfile(managerId,file),HttpStatus.OK);
+//        }else return new ResponseEntity("อัพโหลดไฟล์ไม่สำเร็จ", HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 
     @PostMapping(value = "/signup",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},

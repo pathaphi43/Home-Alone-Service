@@ -30,6 +30,9 @@ public class ManagerService {
     @Autowired
     TenantRepository tenantRepository;
 
+    @Autowired
+    FileUpload fileUpload;
+
 
     public Optional<ManagerEntity> findManagerById(Integer id) {
 
@@ -49,35 +52,35 @@ public class ManagerService {
         return managerRepository.findByManagerUsername(username);
     }
 
-    public ResponseEntity<UploadFileDTO> uploadProfile(MultipartFile file) {
-        String url = "http://homealone.comsciproject.com/manager/upload/profile";
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-        MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
-        try {
-            File convFile = new File(file.getOriginalFilename());
-            FileOutputStream fos = new FileOutputStream(convFile);
-            fos.write(file.getBytes());
-            fos.close();
-            //***Converd File
-            params.add("image_file", new FileSystemResource(convFile));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//    public ResponseEntity<UploadFileDTO> uploadProfile(MultipartFile file) {
+//        String url = "http://homealone.comsciproject.com/manager/upload/profile";
+//        RestTemplate restTemplate = new RestTemplate();
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+//        MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
+//        try {
+//            File convFile = new File(file.getOriginalFilename());
+//            FileOutputStream fos = new FileOutputStream(convFile);
+//            fos.write(file.getBytes());
+//            fos.close();
+//            //***Converd File
+//            params.add("image_file", new FileSystemResource(convFile));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(params, headers);
+//        Map<String, Object> FeedBackStatus=new HashMap<String, Object>();
+//        ResponseEntity<UploadFileDTO> response = restTemplate.exchange(url, HttpMethod.POST, request, UploadFileDTO.class);
+//        return response;
+//    }
 
-        HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(params, headers);
-        Map<String, Object> FeedBackStatus=new HashMap<String, Object>();
-        ResponseEntity<UploadFileDTO> response = restTemplate.exchange(url, HttpMethod.POST, request, UploadFileDTO.class);
-        return response;
-    }
 
-
-    public ManagerEntity saveManagerProfile(String managerId, MultipartFile file) {
-        ResponseEntity<UploadFileDTO> response = uploadProfile(file);
+    public String saveManagerProfile(String username, MultipartFile file) {
+        ResponseEntity<UploadFileDTO> response = fileUpload.uploadProfile(file);
         if (response.getStatusCode() == HttpStatus.OK) {
             ManagerEntity manager = new ManagerEntity();
-            Optional<ManagerEntity> managers = managerRepository.findById(Integer.parseInt(managerId));
+            Optional<ManagerEntity> managers = managerRepository.findByManagerUsername(username);
             if (managers.isPresent()) {
                 manager.setManagerUsername(managers.get().getManagerUsername());
                 manager.setManagerPassword(managers.get().getManagerPassword());
@@ -89,9 +92,9 @@ public class ManagerService {
                 manager.setManagerPhone(managers.get().getManagerPhone());
                 manager.setManagerImage(response.getBody().getImgPath());
                 manager.setManagerStatus(managers.get().getManagerStatus());
-                manager.setMid(Integer.parseInt(managerId));
-                managerRepository.save(manager);
-                return manager;
+                manager.setMid(managers.get().getMid());
+                ManagerEntity result = managerRepository.save(manager);
+                return result.getManagerUsername();
             }else return null;
 
         }else return null;

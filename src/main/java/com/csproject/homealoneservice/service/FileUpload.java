@@ -1,17 +1,25 @@
 package com.csproject.homealoneservice.service;
 
 import com.csproject.homealoneservice.configurations.Configuration;
+import com.csproject.homealoneservice.dto.UploadFileDTO;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPClientConfig;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class FileUpload {
@@ -19,14 +27,31 @@ public class FileUpload {
     @Autowired
     Configuration configuration;
 
+    public ResponseEntity<UploadFileDTO> uploadProfile(MultipartFile file) {
+        String url = "http://homealone.comsciproject.com/manager/upload/profile";
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
+        try {
+            File convFile = new File(file.getOriginalFilename());
+            FileOutputStream fos = new FileOutputStream(convFile);
+            fos.write(file.getBytes());
+            fos.close();
+            //***Converd File
+            params.add("image_file", new FileSystemResource(convFile));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(params, headers);
+        Map<String, Object> FeedBackStatus=new HashMap<String, Object>();
+        ResponseEntity<UploadFileDTO> response = restTemplate.exchange(url, HttpMethod.POST, request, UploadFileDTO.class);
+        return response;
+    }
+
+
     public List<MultipartFile> handleFileUpload(List<MultipartFile> file) {
-
-//        String FTP_ADDRESS = configuration.getFTPHost();
-//        int port = configuration.getFTPPort();
-//        String LOGIN = configuration.getFTPUsername();
-//        String PSW = configuration.getFTPPassword();
-//        FTPClientConfig config = new FTPClientConfig();
-
         System.out.println("File Size "+file);
         try {
             FTPClient con = new FTPClient();
