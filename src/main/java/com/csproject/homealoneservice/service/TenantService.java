@@ -60,7 +60,7 @@ public class TenantService {
                 tenant.setTenantProvince(tenants.get().getTenantProvince());
                 tenant.setTenantDistrict(tenants.get().getTenantDistrict());
                 tenant.setTenantEmail(tenants.get().getTenantEmail());
-                tenant.setTenantImage(tenants.get().getTenantImage());
+                tenant.setTenantImage(response.getBody().getImgPath());
                 tenant.setTenantStatus(tenants.get().getTenantStatus());
                 tenant.setTid(tenants.get().getTid());
                 TenantEntity result = tenantRepository.save(tenant);
