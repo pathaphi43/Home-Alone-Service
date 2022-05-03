@@ -64,7 +64,7 @@ public class TenantService {
                 tenant.setTenantStatus(tenants.get().getTenantStatus());
                 tenant.setTid(tenants.get().getTid());
                 tenantRepository.save(tenant);
-                return tenant.getTenantUsername();
+                return tenant.getTenantImage();
             }else return null;
         }else return null;
 

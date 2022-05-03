@@ -94,7 +94,7 @@ public class ManagerService {
                 manager.setManagerStatus(managers.get().getManagerStatus());
                 manager.setMid(managers.get().getMid());
                 ManagerEntity result = managerRepository.save(manager);
-                return result.getManagerUsername();
+                return result.getManagerImage();
             }else return null;
 
         }else return null;
