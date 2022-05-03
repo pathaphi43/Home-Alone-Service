@@ -63,8 +63,8 @@ public class TenantService {
                 tenant.setTenantImage(tenants.get().getTenantImage());
                 tenant.setTenantStatus(tenants.get().getTenantStatus());
                 tenant.setTid(tenants.get().getTid());
-                tenantRepository.save(tenant);
-                return tenant.getTenantImage();
+                TenantEntity result = tenantRepository.save(tenant);
+                return result.getTenantImage();
             }else return null;
         }else return null;
 
