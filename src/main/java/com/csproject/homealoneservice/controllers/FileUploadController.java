@@ -10,17 +10,20 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+
 import javax.management.MBeanServerConnection;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.io.File;
 import java.nio.channels.Channel;
+import java.util.List;
 
 
 @RestController
@@ -66,8 +69,8 @@ public class FileUploadController {
 //    }
 
 
-    @PostMapping(value  ="/upload",consumes = "multipart/form-data")
-    public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile[] file) {
+    @PostMapping(value  ="/upload",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<String> handleFileUpload(@RequestParam("file") List<MultipartFile> file) {
 
 //        String FTP_ADDRESS = configuration.getFTPHost();
 //        int port = configuration.getFTPPort();
@@ -75,7 +78,7 @@ public class FileUploadController {
 //        String PSW = configuration.getFTPPassword();
 
 
-        System.out.println("File Size "+file.length);
+        System.out.println("File Size "+file);
         try {
             FTPClient con = new FTPClient();
             con.setConnectTimeout(60000);
@@ -94,7 +97,7 @@ public class FileUploadController {
                 con.disconnect();
 //                redirectAttributes.addFlashAttribute("message",
 //                        "You successfully uploaded " + file.getOriginalFilename() + "!");
-                return new ResponseEntity<String>("You successfully uploaded " + file.length + "!", HttpStatus.OK);
+                return new ResponseEntity<String>("You successfully uploaded " + file.size() + "!", HttpStatus.OK);
             }else {
                 logger.info("Can not connect!!");
                 return new ResponseEntity<String>("Can not connect!!", HttpStatus.INTERNAL_SERVER_ERROR);

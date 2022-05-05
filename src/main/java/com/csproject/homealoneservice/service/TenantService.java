@@ -2,12 +2,16 @@ package com.csproject.homealoneservice.service;
 
 import com.csproject.homealoneservice.dao.ManagerRepository;
 import com.csproject.homealoneservice.dao.TenantRepository;
+import com.csproject.homealoneservice.dto.UploadFileDTO;
 import com.csproject.homealoneservice.entity.ManagerEntity;
 import com.csproject.homealoneservice.entity.TenantEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -19,6 +23,9 @@ public class TenantService {
 
     @Autowired
     ManagerRepository managerRepository;
+
+    @Autowired
+    FileUpload fileUpload;
 
     public Optional<TenantEntity> findTenantById(Integer id){
 
@@ -33,8 +40,37 @@ public class TenantService {
         return  tenantRepository.findByTenantUsername(username);
     }
 
+    public Optional<ManagerEntity> findManager(String username) {
+        return managerRepository.findByManagerUsername(username);
+    }
 
-    public TenantEntity saveManager(TenantEntity tenantBody){
+    public String saveTenantProfile(String username, MultipartFile file) {
+        ResponseEntity<UploadFileDTO> response = fileUpload.uploadProfile(file);
+        if (response.getStatusCode() == HttpStatus.OK) {
+            TenantEntity tenant = new TenantEntity();
+            Optional<TenantEntity> tenants = tenantRepository.findByTenantUsername(username);
+            if (tenants.isPresent()) {
+                tenant.setTenantUsername(tenants.get().getTenantUsername());
+                tenant.setTenantPassword(tenants.get().getTenantPassword());
+                tenant.setTenantFirstname(tenants.get().getTenantFirstname());
+                tenant.setTenantLastname(tenants.get().getTenantLastname());
+                tenant.setTenantPhone(tenants.get().getTenantPhone());
+                tenant.setTenantIdCard(tenants.get().getTenantIdCard());
+                tenant.setTenantAddress(tenants.get().getTenantAddress());
+                tenant.setTenantProvince(tenants.get().getTenantProvince());
+                tenant.setTenantDistrict(tenants.get().getTenantDistrict());
+                tenant.setTenantEmail(tenants.get().getTenantEmail());
+                tenant.setTenantImage(response.getBody().getImgPath());
+                tenant.setTenantStatus(tenants.get().getTenantStatus());
+                tenant.setTid(tenants.get().getTid());
+                TenantEntity result = tenantRepository.save(tenant);
+                return result.getTenantImage();
+            }else return null;
+        }else return null;
+
+    }
+
+    public TenantEntity saveTenant(TenantEntity tenantBody){
         TenantEntity tenant = new TenantEntity();
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         if(!findTenant(tenantBody.getTenantUsername()).isPresent() && !managerRepository.findByManagerUsername(tenantBody.getTenantUsername()).isPresent()){
@@ -54,5 +90,6 @@ public class TenantService {
             return tenant;
         }else  return null;
     }
+
 
 }

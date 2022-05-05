@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.csproject.homealoneservice.dto.UserDTO;
 import com.csproject.homealoneservice.entity.ManagerEntity;
 import com.csproject.homealoneservice.entity.TenantEntity;
+import com.csproject.homealoneservice.service.FileUpload;
 import com.csproject.homealoneservice.service.ManagerService;
 import com.csproject.homealoneservice.service.TenantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -29,11 +31,33 @@ public class UserController {
     @Autowired
     TenantService tenantService;
 
+    @Autowired
+    FileUpload fileUpload;
+
     @GetMapping(value = "")
     public String test(){
         return "UserController";
     }
+//    @PostMapping(value = "/upload/profile",
+//            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE},
+//            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+//    public ResponseEntity<ManagerEntity> uploadProfile(@RequestParam("managerId") String managerId, @RequestParam("file") MultipartFile file){
+//        List<MultipartFile> result = fileUpload.handleFileUpload(file);
+//        if(!file.isEmpty()){
+//            return new ResponseEntity(managerService.saveManagerProfile(managerId,file),HttpStatus.OK);
+//        }else return new ResponseEntity("อัพโหลดไฟล์ไม่สำเร็จ", HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 
+    @PostMapping(value = "/upload/profile",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<String> uploadProfile(@RequestParam("username") String username, @RequestParam("file") MultipartFile file){
+        if (!username.isEmpty() && managerService.findManager(username).isPresent()){
+            return new ResponseEntity<>(managerService.saveManagerProfile(username,file), HttpStatus.OK);
+        }else if (!username.isEmpty() && tenantService.findTenant(username).isPresent()){
+                return new ResponseEntity<>(tenantService.saveTenantProfile(username,file), HttpStatus.OK);
+            }else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
 
     @PostMapping(value = "signin",
