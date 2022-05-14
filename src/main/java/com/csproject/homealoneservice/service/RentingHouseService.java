@@ -80,8 +80,24 @@ public class RentingHouseService {
         if(rentingHouse != null){
             Optional<TenantEntity> tenant = tenantService.findTenantById(rentingHouse.getTid());
             Optional<HouseEntity> house =  houseService.findById(rentingHouse.getHid());
-            rentDTO.setTenant(tenant.get());
-            rentDTO.setHouse(house.get());
+//            rentDTO.setTenant(tenant.get());
+//            rentDTO.setHouse(house.get());
+            rentDTO.setHouseName(house.get().getHouseName());
+            rentDTO.setHouseRent(house.get().getHouseRent());
+            rentDTO.setHouseDeposit(house.get().getHouseDeposit());
+            rentDTO.setHouseInsurance(house.get().getHouseInsurance());
+            rentDTO.setHouseAddress(house.get().getHouseAddress());
+            rentDTO.setHouseProvince(house.get().getHouseProvince());
+            rentDTO.setHouseDistrict(house.get().getHouseDistrict());
+            rentDTO.setHouseElectric(house.get().getHouseElectric());
+            rentDTO.setHouseWater(house.get().getHouseWater());
+            rentDTO.setTenantFirstname(tenant.get().getTenantFirstname());
+            rentDTO.setTenantLastname(tenant.get().getTenantLastname());
+            rentDTO.setTenantPhone(tenant.get().getTenantPhone());
+            rentDTO.setTenantUsername(tenant.get().getTenantUsername());
+            rentDTO.setTenantImage(tenant.get().getTenantImage());
+            rentDTO.setTenantProvince(tenant.get().getTenantProvince());
+            rentDTO.setTenantDistrict(tenant.get().getTenantDistrict());
             rentDTO.setRid(rentingHouse.getRid());
             rentDTO.setHid(rentingHouse.getHid());
             rentDTO.setTid(rentingHouse.getTid());
