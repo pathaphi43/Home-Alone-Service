@@ -79,6 +79,15 @@ public class FileUpload {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
+        params.add("pdf_file", new FileSystemResource(converdFilePdf(file,rentBody)));
+
+        HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(params, headers);
+        Map<String, Object> FeedBackStatus=new HashMap<String, Object>();
+        ResponseEntity<UploadFileDTO> response = restTemplate.exchange(url, HttpMethod.POST, request, UploadFileDTO.class);
+        return response;
+    }
+
+    public File converdFilePdf(MultipartFile file,RentingHouseEntity rentBody){
         try {
             File convFile = new File(file.getOriginalFilename());
             logger.info(convFile.getAbsolutePath());
@@ -89,20 +98,18 @@ public class FileUpload {
             FileOutputStream fos = new FileOutputStream(renameFile);
             fos.write(file.getBytes());
             fos.close();
+
             //***Converd File
-            params.add("pdf_file", new FileSystemResource(renameFile));
+            return renameFile;
         } catch (Exception e) {
             logger.info("File upload error:"+e.getClass());
             if(e.getClass() == SizeLimitExceededException.class){
                 logger.info(e.getClass());
             }
             e.printStackTrace();
-
+                return null;
         }
-        HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(params, headers);
-        Map<String, Object> FeedBackStatus=new HashMap<String, Object>();
-        ResponseEntity<UploadFileDTO> response = restTemplate.exchange(url, HttpMethod.POST, request, UploadFileDTO.class);
-        return response;
+
     }
 
 
