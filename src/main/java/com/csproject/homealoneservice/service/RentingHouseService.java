@@ -56,21 +56,26 @@ public class RentingHouseService {
 
     }
     public RentingHouseEntity confirmRentHouse(RentingHouseEntity rentBody, MultipartFile file){
-        RentingHouseEntity rentingHouse = rentingHouseRepository.findByHidAndRentingStatus(rentBody.getHid(),rentBody.getRentingStatus());
+        RentingHouseEntity rentingHouse = rentingHouseRepository.findByHidAndRentingStatus(rentBody.getHid(),0);
         RentingHouseEntity rentingHouseEntity = new RentingHouseEntity();
         if(rentingHouse != null && rentBody.getTid() == rentingHouse.getTid()){
 //           Optional<TenantEntity> tenant = tenantService.findTenantById(rentingHouse.getTid());
 //            Optional<HouseEntity> house =  houseService.findById(rentingHouse.getHid());
-            ResponseEntity<UploadFileDTO> response = fileUpload.uploadRentPdf(file);
+            ResponseEntity<UploadFileDTO> response = null ;
+            if(!file.isEmpty()){
+                response = fileUpload.uploadRentPdf(file);
+            }
             rentingHouseEntity.setRid(rentingHouse.getRid());
             rentingHouseEntity.setHid(rentingHouse.getHid());
             rentingHouseEntity.setTid(rentingHouse.getTid());
             rentingHouseEntity.setRentingBook(rentingHouse.getRentingBook());
-            rentingHouseEntity.setRentingImage(response.getBody().getImgPath());
+            rentingHouseEntity.setRentingImage(file.isEmpty() ? null :response.getBody().getImgPath());
             rentingHouseEntity.setRentingCheckIn(rentBody.getRentingCheckIn());
             rentingHouseEntity.setRentingStatus(1);
+            return rentingHouseEntity;
         }
-        return rentingHouseRepository.save(rentingHouseEntity);
+//        return rentingHouseRepository.save(rentingHouseEntity);
+        return null;
     }
 
 
