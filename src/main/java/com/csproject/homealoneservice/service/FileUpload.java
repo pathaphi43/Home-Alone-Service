@@ -1,15 +1,17 @@
 package com.csproject.homealoneservice.service;
 
+import ch.qos.logback.core.util.ContentTypeUtil;
 import com.csproject.homealoneservice.configurations.Configuration;
 import com.csproject.homealoneservice.dto.UploadFileDTO;
+import com.csproject.homealoneservice.entity.RentingHouseEntity;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPClientConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
+import org.springframework.security.crypto.codec.Utf8;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -18,8 +20,16 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.naming.SizeLimitExceededException;
+import javax.xml.crypto.Data;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +40,15 @@ public class FileUpload {
 
     @Autowired
     Configuration configuration;
+
+    private static Date queryDate;
+    private String formatDate = "yyyyMMdd";
+    private static final SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private ZoneId zone = ZoneId.of("Asia/Bangkok");
+    private ZonedDateTime zdt = ZonedDateTime.now(ZoneId.of("Asia/Bangkok"));
+    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyMMdd-HHmmss").withZone(zone);
+    private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss").withZone(zone);
+
 
     public ResponseEntity<UploadFileDTO> uploadProfile(MultipartFile file) {
         String url = "http://homealone.comsciproject.com/manager/upload/profile";
@@ -54,7 +73,7 @@ public class FileUpload {
         return response;
     }
 
-    public ResponseEntity<UploadFileDTO> uploadRentPdf(MultipartFile file) {
+    public ResponseEntity<UploadFileDTO> uploadRentPdf(MultipartFile file, RentingHouseEntity rentBody) {
         String url = "http://homealone.comsciproject.com/manager/upload/pdf";
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -62,13 +81,17 @@ public class FileUpload {
         MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
         try {
             File convFile = new File(file.getOriginalFilename());
-            FileOutputStream fos = new FileOutputStream(convFile);
+            logger.info(convFile.getAbsolutePath());
+            logger.info(file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")));
+            File  renameFile = new File(zdt.toLocalDateTime().format(dateTimeFormatter)+"-"+rentBody.getRid()+rentBody.getTid()
+                    +file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")));
+            logger.info(renameFile);
+            FileOutputStream fos = new FileOutputStream(renameFile);
             fos.write(file.getBytes());
             fos.close();
             //***Converd File
-            params.add("pdf_file", new FileSystemResource(convFile));
+            params.add("pdf_file", new FileSystemResource(renameFile));
         } catch (Exception e) {
-
             logger.info("File upload error:"+e.getClass());
             if(e.getClass() == SizeLimitExceededException.class){
                 logger.info(e.getClass());
@@ -76,7 +99,6 @@ public class FileUpload {
             e.printStackTrace();
 
         }
-
         HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(params, headers);
         Map<String, Object> FeedBackStatus=new HashMap<String, Object>();
         ResponseEntity<UploadFileDTO> response = restTemplate.exchange(url, HttpMethod.POST, request, UploadFileDTO.class);

@@ -63,7 +63,7 @@ public class RentingHouseService {
 //            Optional<HouseEntity> house =  houseService.findById(rentingHouse.getHid());
             ResponseEntity<UploadFileDTO> response = null ;
             if(!file.isEmpty()){
-                response = fileUpload.uploadRentPdf(file);
+                response = fileUpload.uploadRentPdf(file,rentBody);
             }
             rentingHouseEntity.setRid(rentingHouse.getRid());
             rentingHouseEntity.setHid(rentingHouse.getHid());
