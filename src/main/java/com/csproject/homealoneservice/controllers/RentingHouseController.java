@@ -36,7 +36,7 @@ public class RentingHouseController {
 
     @PostMapping(value = "/upload/rent-file")
     public ResponseEntity<RentingHouseEntity> confirmRentHouse(@RequestPart("rentData") @Validated RentingHouseEntity rentData, @RequestParam("file") MultipartFile file){
-//        RentingHouseEntity rentingHouse= rentData;
+        logger.info("Rid:"+rentData.getRid());
         if (rentData != null){
           RentingHouseEntity rentingHouse=  rentingHouseService.confirmRentHouse(rentData,file);
           if(rentingHouse != null){

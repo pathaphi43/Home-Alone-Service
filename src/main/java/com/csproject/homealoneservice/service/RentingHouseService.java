@@ -72,9 +72,9 @@ public class RentingHouseService {
             rentingHouseEntity.setRentingImage(file.isEmpty() ? null :response.getBody().getImgPath());
             rentingHouseEntity.setRentingCheckIn(rentBody.getRentingCheckIn());
             rentingHouseEntity.setRentingStatus(1);
-            return rentingHouseEntity;
+            return  rentingHouseRepository.save(rentingHouseEntity);
         }
-//        return rentingHouseRepository.save(rentingHouseEntity);
+
         return null;
     }
 
