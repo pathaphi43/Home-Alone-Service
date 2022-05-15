@@ -34,10 +34,10 @@ public class RentingHouseController {
         return new  ResponseEntity<>(rentingHouseService.rentHouseByhidAndStatus(houseBody.getHid(),houseBody.getRentingStatus()), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/upload/rent-file")
+    @PostMapping(value = "/upload/rent-file",consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RentingHouseEntity> confirmRentHouse(@RequestPart("rentData") @Validated RentingHouseEntity rentData, @RequestParam("file") MultipartFile file){
         logger.info("Rid:"+rentData.getRid());
-        logger.info(file.getOriginalFilename());
+        logger.info(file.getContentType());
         if (rentData != null){
           RentingHouseEntity rentingHouse=  rentingHouseService.confirmRentHouse(rentData,file);
           if(rentingHouse != null){
