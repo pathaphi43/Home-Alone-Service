@@ -1,6 +1,7 @@
 package com.csproject.homealoneservice.controllers;
 
 
+import com.csproject.homealoneservice.dto.ConfirmRentDTO;
 import com.csproject.homealoneservice.dto.RentDTO;
 import com.csproject.homealoneservice.entity.HouseEntity;
 import com.csproject.homealoneservice.entity.RentingHouseEntity;
@@ -25,6 +26,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
 
 
 @RestController
@@ -63,9 +65,17 @@ public class RentingHouseController {
 //    }
 
     @PostMapping(value = "/upload/rent-file",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> confirmRentHouseBody(@ModelAttribute("rentData")@Validated RentDTO rentDTO, @RequestParam("file") MultipartFile file){
-        logger.info(rentDTO.getRid());
+    public ResponseEntity<String> confirmRentHouseBody(@RequestParam("rentData")String rentDTO, @RequestParam("file") MultipartFile file){
+        logger.info(rentDTO);
         logger.info(file.getOriginalFilename());
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            ConfirmRentDTO modelDTO = mapper.readValue(rentDTO, ConfirmRentDTO.class);
+            logger.info(modelDTO.getRid());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
 //        if (!rentDTO.toString().isEmpty()){
 //            RentingHouseEntity rentingHouse=  rentingHouseService.confirmRentHouse(rentDTO,file);
 //            if(rentingHouse != null){

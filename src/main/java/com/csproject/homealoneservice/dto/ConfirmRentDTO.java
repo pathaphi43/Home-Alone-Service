@@ -1,34 +1,26 @@
 package com.csproject.homealoneservice.dto;
 
-import com.csproject.homealoneservice.entity.HouseEntity;
-import com.csproject.homealoneservice.entity.TenantEntity;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Id;
 import java.sql.Timestamp;
 
-public class RentDTO {
+public class ConfirmRentDTO {
+
     private int rid;
 
     private int hid;
 
     private int tid;
 
-    private Timestamp rentingBook;
+    private String rentingBook;
 
-    private Timestamp  rentingCheckIn;
+    private String rentingCheckIn;
 
-    private Timestamp rentingCheckOut;
+    private String rentingCheckOut;
 
     private String rentingImage;
 
     private int rentingStatus;
-
-//    private TenantEntity tenant;
-//
-//    private HouseEntity house;
 
     private int mid;
     private String houseName;
@@ -64,62 +56,16 @@ public class RentDTO {
 
     private MultipartFile file;
 
-    public RentDTO() {
+    public ConfirmRentDTO() {
+
     }
 
-    public RentDTO(int rid, int hid, int tid, Timestamp rentingBook, Timestamp rentingCheckIn, Timestamp rentingCheckOut, String rentingImage, int rentingStatus, int mid, String houseName, String houseAddress, String houseProvince, String houseDistrict, String houseLatitude, String houseLongitude, String houseElectric, String houseWater, Integer houseRent, Integer houseDeposit, Integer houseInsurance, int houseStatus, String tenantUsername, String tenantFirstname, String tenantLastname, String tenantPhone, String tenantAddress, String tenantProvince, String tenantDistrict, String tenantImage, int tenantStatus, MultipartFile file) {
+    public int getRid() {
+        return rid;
+    }
+
+    public void setRid(int rid) {
         this.rid = rid;
-        this.hid = hid;
-        this.tid = tid;
-        this.rentingBook = rentingBook;
-        this.rentingCheckIn = rentingCheckIn;
-        this.rentingCheckOut = rentingCheckOut;
-        this.rentingImage = rentingImage;
-        this.rentingStatus = rentingStatus;
-        this.mid = mid;
-        this.houseName = houseName;
-        this.houseAddress = houseAddress;
-        this.houseProvince = houseProvince;
-        this.houseDistrict = houseDistrict;
-        this.houseLatitude = houseLatitude;
-        this.houseLongitude = houseLongitude;
-        this.houseElectric = houseElectric;
-        this.houseWater = houseWater;
-        this.houseRent = houseRent;
-        this.houseDeposit = houseDeposit;
-        this.houseInsurance = houseInsurance;
-        this.houseStatus = houseStatus;
-        this.tenantUsername = tenantUsername;
-        this.tenantFirstname = tenantFirstname;
-        this.tenantLastname = tenantLastname;
-        this.tenantPhone = tenantPhone;
-        this.tenantAddress = tenantAddress;
-        this.tenantProvince = tenantProvince;
-        this.tenantDistrict = tenantDistrict;
-        this.tenantImage = tenantImage;
-        this.tenantStatus = tenantStatus;
-        this.file = file;
-    }
-
-    public RentDTO(int hid, int tid) {
-        this.hid = hid;
-        this.tid = tid;
-    }
-
-
-    public RentDTO(int hid, int tid,int rid, Timestamp rentingCheckIn, Timestamp rentingCheckOut) {
-        this.hid = hid;
-        this.tid = tid;
-        this.rentingCheckIn = rentingCheckIn;
-        this.rentingCheckOut = rentingCheckOut;
-    }
-
-    public MultipartFile getFile() {
-        return file;
-    }
-
-    public void setFile(MultipartFile file) {
-        this.file = file;
     }
 
     public int getHid() {
@@ -138,35 +84,27 @@ public class RentDTO {
         this.tid = tid;
     }
 
-    public int getRid() {
-        return rid;
-    }
-
-    public void setRid(int rid) {
-        this.rid = rid;
-    }
-
-    public Timestamp getRentingBook() {
+    public String getRentingBook() {
         return rentingBook;
     }
 
-    public void setRentingBook(Timestamp rentingBook) {
+    public void setRentingBook(String rentingBook) {
         this.rentingBook = rentingBook;
     }
 
-    public Timestamp getRentingCheckIn() {
+    public String getRentingCheckIn() {
         return rentingCheckIn;
     }
 
-    public void setRentingCheckIn(Timestamp rentingCheckIn) {
+    public void setRentingCheckIn(String rentingCheckIn) {
         this.rentingCheckIn = rentingCheckIn;
     }
 
-    public Timestamp getRentingCheckOut() {
+    public String getRentingCheckOut() {
         return rentingCheckOut;
     }
 
-    public void setRentingCheckOut(Timestamp rentingCheckOut) {
+    public void setRentingCheckOut(String rentingCheckOut) {
         this.rentingCheckOut = rentingCheckOut;
     }
 
@@ -185,22 +123,6 @@ public class RentDTO {
     public void setRentingStatus(int rentingStatus) {
         this.rentingStatus = rentingStatus;
     }
-//
-//    public TenantEntity getTenant() {
-//        return tenant;
-//    }
-//
-//    public void setTenant(TenantEntity tenant) {
-//        this.tenant = tenant;
-//    }
-//
-//    public HouseEntity getHouse() {
-//        return house;
-//    }
-//
-//    public void setHouse(HouseEntity house) {
-//        this.house = house;
-//    }
 
     public int getMid() {
         return mid;
@@ -376,5 +298,13 @@ public class RentDTO {
 
     public void setTenantStatus(int tenantStatus) {
         this.tenantStatus = tenantStatus;
+    }
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
     }
 }
