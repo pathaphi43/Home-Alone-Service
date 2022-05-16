@@ -55,7 +55,7 @@ public class RentingHouseService {
         else  return null;
 
     }
-    public RentingHouseEntity confirmRentHouse(RentingHouseEntity rentBody, MultipartFile file){
+    public RentingHouseEntity confirmRentHouse(RentDTO rentBody, MultipartFile file){
         RentingHouseEntity rentingHouse = rentingHouseRepository.findByHidAndRentingStatus(rentBody.getHid(),0);
         RentingHouseEntity rentingHouseEntity = new RentingHouseEntity();
         if(rentingHouse != null && rentBody.getTid() == rentingHouse.getTid()){

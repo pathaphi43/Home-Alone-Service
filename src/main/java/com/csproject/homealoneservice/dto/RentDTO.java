@@ -2,6 +2,7 @@ package com.csproject.homealoneservice.dto;
 
 import com.csproject.homealoneservice.entity.HouseEntity;
 import com.csproject.homealoneservice.entity.TenantEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -17,7 +18,7 @@ public class RentDTO {
 
     private Timestamp rentingBook;
 
-    private Timestamp rentingCheckIn;
+    private Timestamp  rentingCheckIn;
 
     private Timestamp rentingCheckOut;
 
@@ -61,6 +62,8 @@ public class RentDTO {
 
     private int tenantStatus;
 
+    private MultipartFile file;
+
     public RentDTO() {
     }
 
@@ -68,6 +71,22 @@ public class RentDTO {
     public RentDTO(int hid, int tid) {
         this.hid = hid;
         this.tid = tid;
+    }
+
+
+    public RentDTO(int hid, int tid,int rid, Timestamp rentingCheckIn, Timestamp rentingCheckOut) {
+        this.hid = hid;
+        this.tid = tid;
+        this.rentingCheckIn = rentingCheckIn;
+        this.rentingCheckOut = rentingCheckOut;
+    }
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
     }
 
     public int getHid() {

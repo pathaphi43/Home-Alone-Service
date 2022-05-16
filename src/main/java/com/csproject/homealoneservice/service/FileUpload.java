@@ -2,6 +2,7 @@ package com.csproject.homealoneservice.service;
 
 import ch.qos.logback.core.util.ContentTypeUtil;
 import com.csproject.homealoneservice.configurations.Configuration;
+import com.csproject.homealoneservice.dto.RentDTO;
 import com.csproject.homealoneservice.dto.UploadFileDTO;
 import com.csproject.homealoneservice.entity.RentingHouseEntity;
 import org.apache.commons.net.ftp.FTP;
@@ -73,7 +74,7 @@ public class FileUpload {
         return response;
     }
 
-    public ResponseEntity<UploadFileDTO> uploadRentPdf(MultipartFile file, RentingHouseEntity rentBody) {
+    public ResponseEntity<UploadFileDTO> uploadRentPdf(MultipartFile file, RentDTO rentBody) {
         String url = "http://homealone.comsciproject.com/manager/upload/pdf";
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -87,7 +88,7 @@ public class FileUpload {
         return response;
     }
 
-    public File converdFilePdf(MultipartFile file,RentingHouseEntity rentBody){
+    public File converdFilePdf(MultipartFile file,RentDTO rentBody){
         try {
             File convFile = new File(file.getOriginalFilename());
             logger.info(convFile.getAbsolutePath());
