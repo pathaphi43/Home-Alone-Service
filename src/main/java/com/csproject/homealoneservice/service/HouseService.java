@@ -1,12 +1,10 @@
 package com.csproject.homealoneservice.service;
 
-import com.csproject.homealoneservice.dao.HouseRepository;
-import com.csproject.homealoneservice.dao.HouseSpecification;
-import com.csproject.homealoneservice.dao.ManagerRepository;
-import com.csproject.homealoneservice.dao.RentalHouseImageRepository;
+import com.csproject.homealoneservice.dao.*;
 import com.csproject.homealoneservice.dto.HouseDTO;
 import com.csproject.homealoneservice.entity.HouseEntity;
 import com.csproject.homealoneservice.entity.RentalHouseImageEntity;
+import com.csproject.homealoneservice.entity.RentingHouseEntity;
 import com.csproject.homealoneservice.enumeration.HouseEnum;
 import com.mysql.cj.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -175,32 +173,5 @@ public class HouseService {
         return houseRepository.save(house);
     }
 
-    public HouseEntity cancelRentHouse(Integer id){
-        HouseEntity house = new HouseEntity();
-        house.setHid(id);
-        Optional<HouseEntity> houseEntity= findById(id);
-        house.setMid(houseEntity.get().getMid());
-        house.setHouseName(houseEntity.get().getHouseName());
-        house.setHouseAddress(houseEntity.get().getHouseAddress());
-        house.setHouseProvince(houseEntity.get().getHouseProvince());
-        house.setHouseDistrict(houseEntity.get().getHouseDistrict());
-        house.setHouseZipcode(houseEntity.get().getHouseZipcode());
-        house.setHouseImage(houseEntity.get().getHouseImage());
-        house.setHouseType(houseEntity.get().getHouseType());
-        house.setHouseFloors(houseEntity.get().getHouseFloors());
-        house.setHouseBedroom(houseEntity.get().getHouseBedroom());
-        house.setHouseBathroom(houseEntity.get().getHouseBathroom());
-        house.setHouseLivingroom(houseEntity.get().getHouseLivingroom());
-        house.setHouseKitchen(houseEntity.get().getHouseKitchen());
-        house.setHouseArea(houseEntity.get().getHouseArea());
-        house.setHouseLatitude(houseEntity.get().getHouseLatitude());
-        house.setHouseLongitude(houseEntity.get().getHouseLongitude());
-        house.setHouseElectric(houseEntity.get().getHouseElectric());
-        house.setHouseWater(houseEntity.get().getHouseWater());
-        house.setHouseRent(houseEntity.get().getHouseRent());
-        house.setHouseDeposit(houseEntity.get().getHouseDeposit());
-        house.setHouseInsurance(houseEntity.get().getHouseInsurance());
-        house.setHouseStatus(HouseEnum.HOUSE_FIRST_INSERT.getStatus());
-        return houseRepository.save(house);
-    }
+
 }

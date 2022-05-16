@@ -8,6 +8,7 @@ import com.csproject.homealoneservice.entity.HouseEntity;
 import com.csproject.homealoneservice.entity.RentingHouseEntity;
 import com.csproject.homealoneservice.entity.TenantEntity;
 import com.csproject.homealoneservice.enumeration.HouseEnum;
+import com.csproject.homealoneservice.enumeration.StatusEnum;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,7 @@ public class RentingHouseService {
         else  return null;
 
     }
+
     public RentingHouseEntity confirmRentHouse(ConfirmRentDTO rentBody, MultipartFile file){
         RentingHouseEntity rentingHouse = rentingHouseRepository.findByHidAndRentingStatus(rentBody.getHid(),0);
         RentingHouseEntity rentingHouseEntity = new RentingHouseEntity();
@@ -88,7 +90,6 @@ public class RentingHouseService {
 
         return null;
     }
-
 
     public RentDTO rentHouseByhidAndStatus(Integer hid,Integer status){
         RentingHouseEntity rentingHouse =  rentingHouseRepository.findByHidAndRentingStatus(hid,status);
@@ -127,7 +128,15 @@ public class RentingHouseService {
 
     }
 
-    public void cancelRentHouse(Integer id){
+    public HouseEntity cancelRentHouse(Integer id){
+        RentingHouseEntity rentingHouse = rentingHouseRepository.findByHidAndRentingStatus(id,StatusEnum.Prepare_Status.getStatus());
+        rentingHouse.setRid(rentingHouse.getRid());
+        rentingHouse.setRentingStatus(StatusEnum.Cancel_Status.getStatus());
+        HouseEntity house = houseService.findById(id).get();
+        house.setHid(id);
+        house.setHouseStatus(HouseEnum.HOUSE_FIRST_INSERT.getStatus());
+        rentingHouseRepository.save(rentingHouse);
+        return houseService.houseRepository.save(house);
     }
 
     public String getFormatDate() {

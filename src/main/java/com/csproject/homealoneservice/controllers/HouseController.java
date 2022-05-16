@@ -66,7 +66,7 @@ public class HouseController {
 
     @GetMapping("/cancelrent/{id}")
     public ResponseEntity<HouseEntity> cancelRentHouse(@PathVariable("id") int id) {
-        return new ResponseEntity(houseService.cancelRentHouse(id), HttpStatus.OK);
+        return new ResponseEntity(rentingHouseService.cancelRentHouse(id), HttpStatus.OK);
     }
 
     @PostMapping(value = "/insert",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
