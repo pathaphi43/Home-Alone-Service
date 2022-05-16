@@ -1,6 +1,7 @@
 package com.csproject.homealoneservice.service;
 
 import com.csproject.homealoneservice.dao.RentingHouseRepository;
+import com.csproject.homealoneservice.dto.ConfirmRentDTO;
 import com.csproject.homealoneservice.dto.RentDTO;
 import com.csproject.homealoneservice.dto.UploadFileDTO;
 import com.csproject.homealoneservice.entity.HouseEntity;
@@ -55,7 +56,7 @@ public class RentingHouseService {
         else  return null;
 
     }
-    public RentingHouseEntity confirmRentHouse(RentDTO rentBody, MultipartFile file){
+    public RentingHouseEntity confirmRentHouse(ConfirmRentDTO rentBody, MultipartFile file){
         RentingHouseEntity rentingHouse = rentingHouseRepository.findByHidAndRentingStatus(rentBody.getHid(),0);
         RentingHouseEntity rentingHouseEntity = new RentingHouseEntity();
         if(rentingHouse != null && rentBody.getTid() == rentingHouse.getTid()){
@@ -70,9 +71,10 @@ public class RentingHouseService {
             rentingHouseEntity.setTid(rentingHouse.getTid());
             rentingHouseEntity.setRentingBook(rentingHouse.getRentingBook());
             rentingHouseEntity.setRentingImage(file.isEmpty() ? null :response.getBody().getImgPath());
-            rentingHouseEntity.setRentingCheckIn(rentBody.getRentingCheckIn());
+            rentingHouseEntity.setRentingCheckIn(Timestamp.valueOf(rentBody.getRentingCheckIn()));
             rentingHouseEntity.setRentingStatus(1);
-            return  rentingHouseRepository.save(rentingHouseEntity);
+//            return  rentingHouseRepository.save(rentingHouseEntity);
+            return  rentingHouseEntity;
         }
 
         return null;

@@ -64,25 +64,25 @@ public class RentingHouseController {
 ////   return new ResponseEntity<>(null, HttpStatus.OK);
 //    }
 
-    @PostMapping(value = "/upload/rent-file",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> confirmRentHouseBody(@RequestParam("rentData")String rentDTO, @RequestParam("file") MultipartFile file){
+    @PostMapping(value = "/upload/rent-file",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<RentingHouseEntity> confirmRentHouseBody(@RequestParam("rentData")String rentDTO, @RequestParam("file") MultipartFile file){
         logger.info(rentDTO);
         logger.info(file.getOriginalFilename());
         try {
             ObjectMapper mapper = new ObjectMapper();
             ConfirmRentDTO modelDTO = mapper.readValue(rentDTO, ConfirmRentDTO.class);
-            logger.info(modelDTO.getRid());
+            if (modelDTO != null){
+            RentingHouseEntity rentingHouse=  rentingHouseService.confirmRentHouse(modelDTO,file);
+            if(rentingHouse != null){
+                return new ResponseEntity<>(rentingHouse, HttpStatus.OK);
+            } else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        } else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+
         }catch (Exception e){
             e.printStackTrace();
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-//        if (!rentDTO.toString().isEmpty()){
-//            RentingHouseEntity rentingHouse=  rentingHouseService.confirmRentHouse(rentDTO,file);
-//            if(rentingHouse != null){
-//                return new ResponseEntity<>(rentingHouse, HttpStatus.OK);
-//            } else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-//        } else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-   return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 public static Object deserialize(byte[] data) throws IOException, ClassNotFoundException {
     ByteArrayInputStream in = new ByteArrayInputStream(data);
