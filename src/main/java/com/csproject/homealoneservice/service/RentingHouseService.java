@@ -73,8 +73,17 @@ public class RentingHouseService {
             rentingHouseEntity.setRentingImage(file.isEmpty() ? null :response.getBody().getImgPath());
             rentingHouseEntity.setRentingCheckIn(Timestamp.valueOf(rentBody.getRentingCheckIn()));
             rentingHouseEntity.setRentingStatus(1);
-//            return  rentingHouseRepository.save(rentingHouseEntity);
-            return  rentingHouseEntity;
+             RentingHouseEntity result = rentingHouseRepository.save(rentingHouseEntity);
+
+            if(result != null){
+                HouseEntity house = houseService.findById(rentBody.getHid()).get();
+                house.setHid(rentBody.getHid());
+                house.setHouseStatus(1);
+                houseService.houseRepository.save(house);
+                return  result;
+            }else return null;
+
+
         }
 
         return null;
