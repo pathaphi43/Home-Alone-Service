@@ -36,7 +36,7 @@ public class PaymentEntity {
     private Timestamp payElecInmonth;
     @Basic
     @Column(name = "pay_elec_amount")
-    private double payElecAmount;
+    private String payElecAmount;
     @Basic
     @Column(name = "pay_elec_date")
     private Timestamp payElecDate;
@@ -54,7 +54,7 @@ public class PaymentEntity {
     private Timestamp payWaterInmonth;
     @Basic
     @Column(name = "pay_water_amount")
-    private double payWaterAmount;
+    private String payWaterAmount;
     @Basic
     @Column(name = "pay_water_date")
     private Timestamp payWaterDate;
@@ -140,11 +140,11 @@ public class PaymentEntity {
         this.payElecInmonth = payElecInmonth;
     }
 
-    public double getPayElecAmount() {
+    public String getPayElecAmount() {
         return payElecAmount;
     }
 
-    public void setPayElecAmount(double payElecAmount) {
+    public void setPayElecAmount(String payElecAmount) {
         this.payElecAmount = payElecAmount;
     }
 
@@ -188,11 +188,11 @@ public class PaymentEntity {
         this.payWaterInmonth = payWaterInmonth;
     }
 
-    public double getPayWaterAmount() {
+    public String getPayWaterAmount() {
         return payWaterAmount;
     }
 
-    public void setPayWaterAmount(double payWaterAmount) {
+    public void setPayWaterAmount(String payWaterAmount) {
         this.payWaterAmount = payWaterAmount;
     }
 
@@ -238,9 +238,9 @@ public class PaymentEntity {
         if (id != that.id) return false;
         if (payHouseAmount != that.payHouseAmount) return false;
         if (payHouseStatus != that.payHouseStatus) return false;
-        if (Double.compare(that.payElecAmount, payElecAmount) != 0) return false;
+        if (payElecAmount != null ? !payElecAmount.equals(that.payElecAmount) : that.payElecAmount != null) return false;
         if (payElecStatus != that.payElecStatus) return false;
-        if (Double.compare(that.payWaterAmount, payWaterAmount) != 0) return false;
+        if (payWaterAmount != null ? !payWaterAmount.equals(that.payWaterAmount) : that.payWaterAmount != null) return false;
         if (payWaterStatus != that.payWaterStatus) return false;
         if (rid != null ? !rid.equals(that.rid) : that.rid != null) return false;
         if (installment != null ? !installment.equals(that.installment) : that.installment != null) return false;
@@ -274,15 +274,16 @@ public class PaymentEntity {
         result = 31 * result + (payHouseImg != null ? payHouseImg.hashCode() : 0);
         result = 31 * result + payHouseStatus;
         result = 31 * result + (payElecInmonth != null ? payElecInmonth.hashCode() : 0);
-        temp = Double.doubleToLongBits(payElecAmount);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (payElecAmount != null ? payElecAmount.hashCode() : 0);
+//        result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (payElecDate != null ? payElecDate.hashCode() : 0);
         result = 31 * result + (payElecEnd != null ? payElecEnd.hashCode() : 0);
         result = 31 * result + (payElecImg != null ? payElecImg.hashCode() : 0);
         result = 31 * result + payElecStatus;
         result = 31 * result + (payWaterInmonth != null ? payWaterInmonth.hashCode() : 0);
-        temp = Double.doubleToLongBits(payWaterAmount);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (payWaterAmount != null ? payWaterAmount.hashCode() : 0);
+//    temp = Double.doubleToLongBits(payWaterAmount);
+//        result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (payWaterDate != null ? payWaterDate.hashCode() : 0);
         result = 31 * result + (payWaterEnd != null ? payWaterEnd.hashCode() : 0);
         result = 31 * result + (payWaterImg != null ? payWaterImg.hashCode() : 0);
