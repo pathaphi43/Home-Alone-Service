@@ -1,24 +1,48 @@
 package com.csproject.homealoneservice.service;
 
-import com.csproject.homealoneservice.dao.PaymentRepository;
-import com.csproject.homealoneservice.entity.PaymentEntity;
+import com.csproject.homealoneservice.dao.*;
+import com.csproject.homealoneservice.dto.PaymentDTO;
+import com.csproject.homealoneservice.dto.PaymentSearchDTO;
+import com.csproject.homealoneservice.entity.*;
 import com.csproject.homealoneservice.enumeration.StatusEnum;
+import com.csproject.homealoneservice.prepare.PrepareData;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
-public class PaymentService{
+public class PaymentService {
+    private final Logger logger = LogManager.getLogger(this.getClass().getName());
 
     @Autowired
     PaymentRepository paymentRepository;
 
-   public List<PaymentEntity> findAllPayment(){
-        return paymentRepository.findAll();
-   }
+    @Autowired
+    HouseRepository houseRepository;
 
-   public PaymentEntity savePayment(PaymentEntity paymentBody){
+    @Autowired
+    ManagerRepository managerRepository;
+
+    @Autowired
+    TenantRepository tenantRepository;
+
+    @Autowired
+    RentingHouseRepository rentingHouseRepository;
+
+
+    public List<PaymentEntity> findAllPayment() {
+        return paymentRepository.findAll();
+    }
+
+    public PaymentEntity savePayment(PaymentEntity paymentBody) {
         PaymentEntity paymentEntity = new PaymentEntity();
         paymentEntity.setRid(paymentBody.getRid());
         paymentEntity.setInstallment(paymentBody.getInstallment());
@@ -34,6 +58,41 @@ public class PaymentService{
         paymentEntity.setPayWaterInmonth(paymentBody.getPayWaterInmonth());
         paymentEntity.setPayWaterEnd(paymentBody.getPayWaterEnd());
         paymentEntity.setPayWaterStatus(StatusEnum.Prepare_Status.getStatus());
-       return paymentRepository.save(paymentEntity);
-   }
+        return paymentRepository.save(paymentEntity);
+    }
+
+    public List<PaymentDTO> findAllPaymentByHouseManagerId(Integer mid) {
+        List<Integer> rentingStatusList = PrepareData.getRentingStatusList();
+        List<PaymentDTO> paymentDTOS = new ArrayList<>();
+        ManagerEntity manager = managerRepository.findById(mid).get();
+        List<HouseEntity> houseEntityList = houseRepository.findByMid(mid);
+        for (HouseEntity house : houseEntityList) {
+            List<RentingHouseEntity>  rentingHouses = rentingHouseRepository.findAllByHidAndRentingStatusIn(house.getHid(), rentingStatusList);
+            for (RentingHouseEntity renting: rentingHouses){
+                List<PaymentEntity> payments = paymentRepository.findAllByRid(renting.getRid());
+                logger.info(!payments.isEmpty());
+                if(!payments.isEmpty()){
+                    TenantEntity tenant = tenantRepository.findById(renting.getTid()).get();
+                    paymentDTOS.add(new PaymentDTO(house,tenant,payments));
+                }
+            }
+        }
+
+        return paymentDTOS;
+    }
+
+    public List<PaymentDTO> findAllPaymentByHouseManagerIdInMonth(PaymentSearchDTO paymentBody) {
+        Timestamp start = Timestamp.valueOf(paymentBody.getTimeStart());
+        Timestamp end = Timestamp.valueOf(paymentBody.getTimeEnd());
+        List<PaymentEntity> payments = paymentRepository.findAll(PaymentSpecification.dateBetween(start,end));
+        List<PaymentDTO> paymentDTOS = new ArrayList<>();
+        for (PaymentEntity payment:payments){
+            logger.info(payment);
+          RentingHouseEntity rentingHouse = rentingHouseRepository.findById(payment.getRid()).get();
+          TenantEntity tenant = tenantRepository.findById(rentingHouse.getTid()).get();
+          HouseEntity house = houseRepository.findById(rentingHouse.getHid()).get();
+          paymentDTOS.add(new PaymentDTO(house,tenant,payment));
+        }
+        return  paymentDTOS;
+    }
 }

@@ -1,5 +1,8 @@
 package com.csproject.homealoneservice.controllers;
 
+import com.csproject.homealoneservice.dto.PaymentDTO;
+import com.csproject.homealoneservice.dto.PaymentSearchDTO;
+import com.csproject.homealoneservice.entity.HouseEntity;
 import com.csproject.homealoneservice.entity.ManagerEntity;
 import com.csproject.homealoneservice.entity.PaymentEntity;
 import com.csproject.homealoneservice.service.PaymentService;
@@ -34,6 +37,16 @@ public class PaymentController {
     public ResponseEntity<PaymentEntity>  savePayment(@RequestBody PaymentEntity paymentBody){
 
         return new ResponseEntity<>(paymentService.savePayment(paymentBody), HttpStatus.OK);
+    }
+
+    @GetMapping("/house-rent/{mid}")
+    public ResponseEntity<List<HouseEntity>> findAllHouseByManagerId(@PathVariable("mid") int mid) {
+        return new ResponseEntity(paymentService.findAllPaymentByHouseManagerId(mid), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/date-between")
+    public ResponseEntity<List<PaymentDTO>> findAllPaymentByHouseManagerIdBet(@RequestBody PaymentSearchDTO paymentSearchDTO) {
+        return new ResponseEntity(paymentService.findAllPaymentByHouseManagerIdInMonth(paymentSearchDTO), HttpStatus.OK);
     }
 
 }
