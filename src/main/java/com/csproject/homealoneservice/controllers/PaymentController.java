@@ -1,17 +1,22 @@
 package com.csproject.homealoneservice.controllers;
 
+import com.csproject.homealoneservice.dto.ConfirmRentDTO;
 import com.csproject.homealoneservice.dto.PaymentDTO;
 import com.csproject.homealoneservice.dto.PaymentSearchDTO;
 import com.csproject.homealoneservice.entity.HouseEntity;
 import com.csproject.homealoneservice.entity.ManagerEntity;
 import com.csproject.homealoneservice.entity.PaymentEntity;
+import com.csproject.homealoneservice.entity.RentingHouseEntity;
 import com.csproject.homealoneservice.service.PaymentService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -52,6 +57,25 @@ public class PaymentController {
     @PostMapping(value = "/date-between")
     public ResponseEntity<List<PaymentDTO>> findAllPaymentByHouseManagerIdBet(@RequestBody PaymentSearchDTO paymentSearchDTO) {
         return new ResponseEntity(paymentService.findAllPaymentByHouseManagerIdInMonth(paymentSearchDTO), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/tenant-rent",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<PaymentEntity> confirmRentHouseBody(@RequestParam("id")int id,@RequestParam("date")String date, @RequestParam("file") MultipartFile file){
+        logger.info(file.getOriginalFilename());
+        try {
+//            ObjectMapper mapper = new ObjectMapper();
+//            ConfirmRentDTO modelDTO = mapper.readValue(rentDTO, ConfirmRentDTO.class);
+            if (!file.isEmpty()){
+                PaymentEntity rentingHouse=  paymentService.tenantPaymentRent(id,date,file);
+                if(rentingHouse != null){
+                    return new ResponseEntity<>(rentingHouse, HttpStatus.OK);
+                } else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            } else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
 }

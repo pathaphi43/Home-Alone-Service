@@ -5,6 +5,7 @@ import com.csproject.homealoneservice.configurations.Configuration;
 import com.csproject.homealoneservice.dto.ConfirmRentDTO;
 import com.csproject.homealoneservice.dto.RentDTO;
 import com.csproject.homealoneservice.dto.UploadFileDTO;
+import com.csproject.homealoneservice.entity.PaymentEntity;
 import com.csproject.homealoneservice.entity.RentingHouseEntity;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -81,7 +82,7 @@ public class FileUpload {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
-        params.add("pdf_file", new FileSystemResource(converdFilePdf(file,rentBody)));
+        params.add("pdf_file", new FileSystemResource(converdFile(file,rentBody.getRid(),rentBody.getTid())));
 
         HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(params, headers);
         Map<String, Object> FeedBackStatus=new HashMap<String, Object>();
@@ -89,12 +90,26 @@ public class FileUpload {
         return response;
     }
 
-    public File converdFilePdf(MultipartFile file,ConfirmRentDTO rentBody){
+    public ResponseEntity<UploadFileDTO> uploadRent(MultipartFile file,int id) {
+        String url = "http://homealone.comsciproject.com/manager/upload/profile";
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
+        params.add("image_file", new FileSystemResource(converdFile(file,id,id)));
+
+        HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(params, headers);
+        Map<String, Object> FeedBackStatus=new HashMap<String, Object>();
+        ResponseEntity<UploadFileDTO> response = restTemplate.exchange(url, HttpMethod.POST, request, UploadFileDTO.class);
+        return response;
+    }
+
+    public File converdFile(MultipartFile file,int firstId,int secondId){
         try {
             File convFile = new File(file.getOriginalFilename());
             logger.info(convFile.getAbsolutePath());
             logger.info(file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")));
-            File  renameFile = new File(zdt.toLocalDateTime().format(dateTimeFormatter)+"-"+rentBody.getRid()+rentBody.getTid()
+            File  renameFile = new File(zdt.toLocalDateTime().format(dateTimeFormatter)+"-"+firstId+secondId
                     +file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")));
             logger.info(renameFile);
             FileOutputStream fos = new FileOutputStream(renameFile);

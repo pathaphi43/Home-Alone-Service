@@ -3,13 +3,17 @@ package com.csproject.homealoneservice.service;
 import com.csproject.homealoneservice.dao.*;
 import com.csproject.homealoneservice.dto.PaymentDTO;
 import com.csproject.homealoneservice.dto.PaymentSearchDTO;
+import com.csproject.homealoneservice.dto.UploadFileDTO;
 import com.csproject.homealoneservice.entity.*;
+import com.csproject.homealoneservice.enumeration.PayStatusEnum;
 import com.csproject.homealoneservice.enumeration.StatusEnum;
 import com.csproject.homealoneservice.prepare.PrepareData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -36,6 +40,9 @@ public class PaymentService {
 
     @Autowired
     RentingHouseRepository rentingHouseRepository;
+
+    @Autowired
+    FileUpload fileUpload;
 
     List<Integer> rentingStatusList = PrepareData.getRentingStatusList();
 
@@ -94,6 +101,29 @@ public class PaymentService {
         }
 
         return paymentDTOS;
+    }
+
+    public PaymentEntity tenantPaymentRent(int id,String date, MultipartFile file){
+       PaymentEntity payment =  paymentRepository.findById(id).get();
+        payment.setPayHouseStatus(PayStatusEnum.Prepare_Status.getStatus());
+        payment.setPayHouseDate(Timestamp.valueOf(date));
+        ResponseEntity<UploadFileDTO> response = null ;
+        if(!file.isEmpty()){
+            response = fileUpload.uploadRent(file,id);
+        }
+        payment.setPayHouseImg(response.getBody().getImgPath());
+        return paymentRepository.save(payment);
+    }
+
+    public PaymentEntity tenantPaymentWater(PaymentEntity paymentBody, MultipartFile file){
+        PaymentEntity payment =  paymentRepository.findById(paymentBody.getId()).get();
+
+        return paymentBody;
+    }
+    public PaymentEntity tenantPaymentElectric(PaymentEntity paymentBody, MultipartFile file){
+        PaymentEntity payment =  paymentRepository.findById(paymentBody.getId()).get();
+
+        return paymentBody;
     }
 
     public List<PaymentDTO> findAllPaymentByHouseManagerIdInMonth(PaymentSearchDTO paymentBody) {
