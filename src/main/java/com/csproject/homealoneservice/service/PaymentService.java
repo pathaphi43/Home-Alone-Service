@@ -37,6 +37,7 @@ public class PaymentService {
     @Autowired
     RentingHouseRepository rentingHouseRepository;
 
+    List<Integer> rentingStatusList = PrepareData.getRentingStatusList();
 
     public List<PaymentEntity> findAllPayment() {
         return paymentRepository.findAll();
@@ -62,19 +63,33 @@ public class PaymentService {
     }
 
     public List<PaymentDTO> findAllPaymentByHouseManagerId(Integer mid) {
-        List<Integer> rentingStatusList = PrepareData.getRentingStatusList();
         List<PaymentDTO> paymentDTOS = new ArrayList<>();
         ManagerEntity manager = managerRepository.findById(mid).get();
         List<HouseEntity> houseEntityList = houseRepository.findByMid(mid);
         for (HouseEntity house : houseEntityList) {
-            List<RentingHouseEntity>  rentingHouses = rentingHouseRepository.findAllByHidAndRentingStatusIn(house.getHid(), rentingStatusList);
-            for (RentingHouseEntity renting: rentingHouses){
+            List<RentingHouseEntity> rentingHouses = rentingHouseRepository.findAllByHidAndRentingStatusIn(house.getHid(), rentingStatusList);
+            for (RentingHouseEntity renting : rentingHouses) {
                 List<PaymentEntity> payments = paymentRepository.findAllByRid(renting.getRid());
                 logger.info(!payments.isEmpty());
-                if(!payments.isEmpty()){
+                if (!payments.isEmpty()) {
                     TenantEntity tenant = tenantRepository.findById(renting.getTid()).get();
-                    paymentDTOS.add(new PaymentDTO(house,tenant,payments));
+                    paymentDTOS.add(new PaymentDTO(house, tenant, payments));
                 }
+            }
+        }
+        return paymentDTOS;
+    }
+
+    public List<PaymentDTO> findAllPaymentByHouseTenantId(Integer tid) {
+        List<PaymentDTO> paymentDTOS = new ArrayList<>();
+//        ManagerEntity manager = managerRepository.findById(mid).get();
+        List<RentingHouseEntity> rentingHouses = rentingHouseRepository.findAllByTidAndRentingStatusIn(tid, rentingStatusList);
+        TenantEntity tenant = tenantRepository.findById(tid).get();
+        for (RentingHouseEntity rent : rentingHouses) {
+            HouseEntity house = houseRepository.findById(rent.getHid()).get();
+            List<PaymentEntity> payments = paymentRepository.findAllByRid(rent.getRid());
+            if (!payments.isEmpty()) {
+                paymentDTOS.add(new PaymentDTO(house, tenant, payments));
             }
         }
 
@@ -84,15 +99,15 @@ public class PaymentService {
     public List<PaymentDTO> findAllPaymentByHouseManagerIdInMonth(PaymentSearchDTO paymentBody) {
         Timestamp start = Timestamp.valueOf(paymentBody.getTimeStart());
         Timestamp end = Timestamp.valueOf(paymentBody.getTimeEnd());
-        List<PaymentEntity> payments = paymentRepository.findAll(PaymentSpecification.dateBetween(start,end));
+        List<PaymentEntity> payments = paymentRepository.findAll(PaymentSpecification.dateBetween(start, end));
         List<PaymentDTO> paymentDTOS = new ArrayList<>();
-        for (PaymentEntity payment:payments){
+        for (PaymentEntity payment : payments) {
             logger.info(payment);
-          RentingHouseEntity rentingHouse = rentingHouseRepository.findById(payment.getRid()).get();
-          TenantEntity tenant = tenantRepository.findById(rentingHouse.getTid()).get();
-          HouseEntity house = houseRepository.findById(rentingHouse.getHid()).get();
-          paymentDTOS.add(new PaymentDTO(house,tenant,payment));
+            RentingHouseEntity rentingHouse = rentingHouseRepository.findById(payment.getRid()).get();
+            TenantEntity tenant = tenantRepository.findById(rentingHouse.getTid()).get();
+            HouseEntity house = houseRepository.findById(rentingHouse.getHid()).get();
+            paymentDTOS.add(new PaymentDTO(house, tenant, payment));
         }
-        return  paymentDTOS;
+        return paymentDTOS;
     }
 }

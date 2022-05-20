@@ -44,6 +44,11 @@ public class PaymentController {
         return new ResponseEntity(paymentService.findAllPaymentByHouseManagerId(mid), HttpStatus.OK);
     }
 
+    @GetMapping("/house-rent-tenant/{tid}")
+    public ResponseEntity<List<HouseEntity>> findAllHouseByTenantId(@PathVariable("tid") int tid) {
+        return new ResponseEntity(paymentService.findAllPaymentByHouseTenantId(tid), HttpStatus.OK);
+    }
+
     @PostMapping(value = "/date-between")
     public ResponseEntity<List<PaymentDTO>> findAllPaymentByHouseManagerIdBet(@RequestBody PaymentSearchDTO paymentSearchDTO) {
         return new ResponseEntity(paymentService.findAllPaymentByHouseManagerIdInMonth(paymentSearchDTO), HttpStatus.OK);
