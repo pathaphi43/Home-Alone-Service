@@ -115,15 +115,27 @@ public class PaymentService {
         return paymentRepository.save(payment);
     }
 
-    public PaymentEntity tenantPaymentWater(PaymentEntity paymentBody, MultipartFile file){
-        PaymentEntity payment =  paymentRepository.findById(paymentBody.getId()).get();
-
-        return paymentBody;
+    public PaymentEntity tenantPaymentWater(int id,String date, MultipartFile file){
+        PaymentEntity payment =  paymentRepository.findById(id).get();
+        payment.setPayWaterStatus(PayStatusEnum.Prepare_Status.getStatus());
+        payment.setPayWaterDate(Timestamp.valueOf(date));
+        ResponseEntity<UploadFileDTO> response = null ;
+        if(!file.isEmpty()){
+            response = fileUpload.uploadRent(file,id);
+        }
+        payment.setPayWaterImg(response.getBody().getImgPath());
+        return payment;
     }
-    public PaymentEntity tenantPaymentElectric(PaymentEntity paymentBody, MultipartFile file){
-        PaymentEntity payment =  paymentRepository.findById(paymentBody.getId()).get();
-
-        return paymentBody;
+    public PaymentEntity tenantPaymentElectric(int id,String date, MultipartFile file){
+        PaymentEntity payment =  paymentRepository.findById(id).get();
+        payment.setPayElecStatus(PayStatusEnum.Prepare_Status.getStatus());
+        payment.setPayElecDate(Timestamp.valueOf(date));
+        ResponseEntity<UploadFileDTO> response = null ;
+        if(!file.isEmpty()){
+            response = fileUpload.uploadRent(file,id);
+        }
+        payment.setPayElecImg(response.getBody().getImgPath());
+        return payment;
     }
 
     public List<PaymentDTO> findAllPaymentByHouseManagerIdInMonth(PaymentSearchDTO paymentBody) {

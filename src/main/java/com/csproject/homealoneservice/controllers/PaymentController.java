@@ -60,22 +60,36 @@ public class PaymentController {
     }
 
     @PostMapping(value = "/tenant-rent",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<PaymentEntity> confirmRentHouseBody(@RequestParam("id")int id,@RequestParam("date")String date, @RequestParam("file") MultipartFile file){
+    public ResponseEntity<PaymentEntity> paymentTenantRent(@RequestParam("id")int id,@RequestParam("date")String date, @RequestParam("file") MultipartFile file){
         logger.info(file.getOriginalFilename());
-        try {
-//            ObjectMapper mapper = new ObjectMapper();
-//            ConfirmRentDTO modelDTO = mapper.readValue(rentDTO, ConfirmRentDTO.class);
             if (!file.isEmpty()){
                 PaymentEntity rentingHouse=  paymentService.tenantPaymentRent(id,date,file);
                 if(rentingHouse != null){
                     return new ResponseEntity<>(rentingHouse, HttpStatus.OK);
                 } else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
             } else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }catch (Exception e){
-            e.printStackTrace();
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    }
 
+    @PostMapping(value = "/tenant-water",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<PaymentEntity> paymentTenantWater(@RequestParam("id")int id,@RequestParam("date")String date, @RequestParam("file") MultipartFile file){
+        logger.info(file.getOriginalFilename());
+        if (!file.isEmpty()){
+            PaymentEntity rentingHouse=  paymentService.tenantPaymentWater(id,date,file);
+            if(rentingHouse != null){
+                return new ResponseEntity<>(rentingHouse, HttpStatus.OK);
+            } else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        } else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @PostMapping(value = "/tenant-Electric",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<PaymentEntity> paymentTenantElectric(@RequestParam("id")int id,@RequestParam("date")String date, @RequestParam("file") MultipartFile file){
+        logger.info(file.getOriginalFilename());
+        if (!file.isEmpty()){
+            PaymentEntity rentingHouse=  paymentService.tenantPaymentElectric(id,date,file);
+            if(rentingHouse != null){
+                return new ResponseEntity<>(rentingHouse, HttpStatus.OK);
+            } else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        } else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }
