@@ -124,7 +124,7 @@ public class PaymentService {
             response = fileUpload.uploadRent(file,id);
         }
         payment.setPayWaterImg(response.getBody().getImgPath());
-        return payment;
+        return paymentRepository.save(payment);
     }
     public PaymentEntity tenantPaymentElectric(int id,String date, MultipartFile file){
         PaymentEntity payment =  paymentRepository.findById(id).get();
@@ -135,7 +135,7 @@ public class PaymentService {
             response = fileUpload.uploadRent(file,id);
         }
         payment.setPayElecImg(response.getBody().getImgPath());
-        return payment;
+        return paymentRepository.save(payment);
     }
 
     public List<PaymentDTO> findAllPaymentByHouseManagerIdInMonth(PaymentSearchDTO paymentBody) {
