@@ -92,4 +92,49 @@ public class PaymentController {
         } else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+
+    @GetMapping("/tenant-rent/{id}")
+    public ResponseEntity<PaymentEntity> confirmPaymentTenantRent(@PathVariable("id") int id) {
+        return new ResponseEntity(paymentService.tenantConfirmPaymentRent(id), HttpStatus.OK);
+    }
+    @GetMapping("/tenant-water/{id}")
+    public ResponseEntity<PaymentEntity> confirmPaymentTenantWater(@PathVariable("id") int id) {
+        return new ResponseEntity(paymentService.tenantConfirmPaymentWater(id), HttpStatus.OK);
+    }
+    @GetMapping("/tenant-electric/{id}")
+    public ResponseEntity<PaymentEntity> confirmPaymentTenantElectric(@PathVariable("id") int id) {
+        return new ResponseEntity(paymentService.tenantConfirmPaymentElectric(id), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/edit-tenant-rent",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<PaymentEntity> editPaymentTenantRent(@RequestBody PaymentEntity payment){
+        if (payment != null){
+            PaymentEntity rentingHouse=  paymentService.editRentPayment(payment);
+            if(rentingHouse != null){
+                return new ResponseEntity<>(rentingHouse, HttpStatus.OK);
+            } else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        } else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @PostMapping(value = "/edit-tenant-water",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<PaymentEntity> editPaymentTenantWater(@RequestBody PaymentEntity payment){
+        if (payment != null){
+            PaymentEntity rentingHouse=  paymentService.editWaterPayment(payment);
+            if(rentingHouse != null){
+                return new ResponseEntity<>(rentingHouse, HttpStatus.OK);
+            } else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        } else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @PostMapping(value = "/edit-tenant-electric",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<PaymentEntity> editPaymentTenantElectric(@RequestBody PaymentEntity payment){
+        if (payment != null){
+            PaymentEntity rentingHouse=  paymentService.editElecPayment(payment);
+            if(rentingHouse != null){
+                return new ResponseEntity<>(rentingHouse, HttpStatus.OK);
+            } else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        } else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
 }

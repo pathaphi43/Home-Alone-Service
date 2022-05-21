@@ -56,7 +56,6 @@ public class PaymentService {
         paymentEntity.setInstallment(paymentBody.getInstallment());
         paymentEntity.setPayHouseAmount(paymentBody.getPayHouseAmount());
         paymentEntity.setPayHouseEnd(paymentBody.getPayHouseEnd());
-        paymentEntity.setPayHouseEnd(paymentBody.getPayHouseEnd());
         paymentEntity.setPayHouseStatus(StatusEnum.Prepare_Status.getStatus());
         paymentEntity.setPayElecAmount(paymentBody.getPayElecAmount());
         paymentEntity.setPayElecInmonth(paymentBody.getPayElecInmonth());
@@ -66,6 +65,27 @@ public class PaymentService {
         paymentEntity.setPayWaterInmonth(paymentBody.getPayWaterInmonth());
         paymentEntity.setPayWaterEnd(paymentBody.getPayWaterEnd());
         paymentEntity.setPayWaterStatus(StatusEnum.Prepare_Status.getStatus());
+        return paymentRepository.save(paymentEntity);
+    }
+    public PaymentEntity editRentPayment(PaymentEntity paymentBody) {
+        PaymentEntity paymentEntity = paymentRepository.findById(paymentBody.getId()).get();
+        paymentEntity.setInstallment(paymentBody.getInstallment());
+        paymentEntity.setPayHouseAmount(paymentBody.getPayHouseAmount());
+        paymentEntity.setPayHouseEnd(paymentBody.getPayHouseEnd());
+        return paymentRepository.save(paymentEntity);
+    }
+    public PaymentEntity editWaterPayment(PaymentEntity paymentBody) {
+        PaymentEntity paymentEntity = paymentRepository.findById(paymentBody.getId()).get();
+        paymentEntity.setPayWaterAmount(paymentBody.getPayWaterAmount());
+        paymentEntity.setPayWaterInmonth(paymentBody.getPayWaterInmonth());
+        paymentEntity.setPayWaterEnd(paymentBody.getPayWaterEnd());
+        return paymentRepository.save(paymentEntity);
+    }
+    public PaymentEntity editElecPayment(PaymentEntity paymentBody) {
+        PaymentEntity paymentEntity = paymentRepository.findById(paymentBody.getId()).get();
+        paymentEntity.setPayElecAmount(paymentBody.getPayElecAmount());
+        paymentEntity.setPayElecInmonth(paymentBody.getPayElecInmonth());
+        paymentEntity.setPayElecEnd(paymentBody.getPayElecEnd());
         return paymentRepository.save(paymentEntity);
     }
 
@@ -114,7 +134,6 @@ public class PaymentService {
         payment.setPayHouseImg(response.getBody().getImgPath());
         return paymentRepository.save(payment);
     }
-
     public PaymentEntity tenantPaymentWater(int id,String date, MultipartFile file){
         PaymentEntity payment =  paymentRepository.findById(id).get();
         payment.setPayWaterStatus(PayStatusEnum.Prepare_Status.getStatus());
@@ -135,6 +154,22 @@ public class PaymentService {
             response = fileUpload.uploadRent(file,id);
         }
         payment.setPayElecImg(response.getBody().getImgPath());
+        return paymentRepository.save(payment);
+    }
+
+    public PaymentEntity tenantConfirmPaymentRent(int id){
+        PaymentEntity payment =  paymentRepository.findById(id).get();
+        payment.setPayHouseStatus(PayStatusEnum.Success_Status.getStatus());
+        return paymentRepository.save(payment);
+    }
+    public PaymentEntity tenantConfirmPaymentWater(int id){
+        PaymentEntity payment =  paymentRepository.findById(id).get();
+        payment.setPayWaterStatus(PayStatusEnum.Success_Status.getStatus());
+        return paymentRepository.save(payment);
+    }
+    public PaymentEntity tenantConfirmPaymentElectric(int id){
+        PaymentEntity payment =  paymentRepository.findById(id).get();
+        payment.setPayElecStatus(PayStatusEnum.Success_Status.getStatus());
         return paymentRepository.save(payment);
     }
 
