@@ -81,7 +81,7 @@ public class PaymentController {
         } else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PostMapping(value = "/tenant-Electric",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/tenant-electric",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<PaymentEntity> paymentTenantElectric(@RequestParam("id")int id,@RequestParam("date")String date, @RequestParam("file") MultipartFile file){
         logger.info(file.getOriginalFilename());
         if (!file.isEmpty()){
