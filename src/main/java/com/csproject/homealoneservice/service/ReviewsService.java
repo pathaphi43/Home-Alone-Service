@@ -4,13 +4,16 @@ import com.csproject.homealoneservice.dao.HouseRepository;
 import com.csproject.homealoneservice.dao.RentingHouseRepository;
 import com.csproject.homealoneservice.dao.ReviewsImageRepository;
 import com.csproject.homealoneservice.dao.ReviewsRepository;
-import com.csproject.homealoneservice.dto.HouseDTO;
-import com.csproject.homealoneservice.dto.PreReviewDTO;
-import com.csproject.homealoneservice.dto.ReviewsDTO;
+import com.csproject.homealoneservice.dto.*;
 import com.csproject.homealoneservice.entity.HouseEntity;
 import com.csproject.homealoneservice.entity.RentingHouseEntity;
 import com.csproject.homealoneservice.entity.ReviewsEntity;
+import com.csproject.homealoneservice.entity.ReviewsImageEntity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,7 +22,7 @@ import java.util.List;
 
 @Service
 public class ReviewsService {
-
+    private final Logger logger = LogManager.getLogger(this.getClass().getName());
     @Autowired
     ReviewsImageRepository reviewsImageRepository;
 
@@ -32,6 +35,8 @@ public class ReviewsService {
     @Autowired
     HouseRepository houseRepository;
 
+    @Autowired
+    FileUpload fileUpload;
 
     public List<ReviewsDTO> queryReviewByHid(Integer id){
         List<ReviewsDTO> reviewsDTOS = new ArrayList<>();
@@ -57,15 +62,36 @@ public class ReviewsService {
       return  preReviewDTO;
     }
 
-    public ReviewsEntity saveReview(ReviewsEntity reviewBody, MultipartFile file){
+    public ReviewsEntity saveReview(ReviewsEntity reviewBody, MultipartFile[] files){
         ReviewsEntity reviewsEntity = new ReviewsEntity();
+        List<ReviewsImageEntity> reviewsImage = new ArrayList<>();
+        ResponseEntity<UploadMultipartFileDTO> response = null ;
+
         reviewsEntity.setReviewsScore(reviewBody.getReviewsScore());
         reviewsEntity.setReviewsText(reviewBody.getReviewsText());
         reviewsEntity.setReviewsStatus(1);
         reviewsEntity.setRid(reviewBody.getRid());
         reviewsEntity.setTid(reviewBody.getTid());
         reviewsEntity.setReviewsDate(reviewBody.getReviewsDate());
-        return reviewsEntity;
+        ReviewsEntity reviews = reviewsRepository.save(reviewsEntity);
+        if(reviews != null){
+            if(files != null){
+                response =  fileUpload.uploadMultipartFile(files,reviewsEntity.getId());
+                if(response.getStatusCode() == HttpStatus.OK){
+                    for (String path:response.getBody().getImgPath()){
+                        ReviewsImageEntity imageEntity= new ReviewsImageEntity();
+                        imageEntity.setReviewsImage(path);
+                        imageEntity.setRid(reviewsEntity.getId());
+                        reviewsImage.add(imageEntity);
+                    }
+                    reviewsImageRepository.saveAll(reviewsImage);
+                }
+            }
+        }
+
+
+
+        return reviews;
     }
 
 

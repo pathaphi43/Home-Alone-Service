@@ -5,6 +5,7 @@ import com.csproject.homealoneservice.configurations.Configuration;
 import com.csproject.homealoneservice.dto.ConfirmRentDTO;
 import com.csproject.homealoneservice.dto.RentDTO;
 import com.csproject.homealoneservice.dto.UploadFileDTO;
+import com.csproject.homealoneservice.dto.UploadMultipartFileDTO;
 import com.csproject.homealoneservice.entity.PaymentEntity;
 import com.csproject.homealoneservice.entity.RentingHouseEntity;
 import org.apache.commons.net.ftp.FTP;
@@ -101,6 +102,23 @@ public class FileUpload {
         HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(params, headers);
         Map<String, Object> FeedBackStatus=new HashMap<String, Object>();
         ResponseEntity<UploadFileDTO> response = restTemplate.exchange(url, HttpMethod.POST, request, UploadFileDTO.class);
+        return response;
+    }
+
+    public ResponseEntity<UploadMultipartFileDTO> uploadMultipartFile(MultipartFile[] files,int id) {
+        String url = "http://homealone.comsciproject.com/manager/photos/upload";
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
+        int i = 0;
+        for(MultipartFile file:files){
+            params.add("photos", new FileSystemResource(converdFile(file,i,id)));
+            i++;
+        }
+        HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(params, headers);
+        Map<String, Object> FeedBackStatus=new HashMap<String, Object>();
+        ResponseEntity<UploadMultipartFileDTO> response = restTemplate.exchange(url, HttpMethod.POST, request, UploadMultipartFileDTO.class);
         return response;
     }
 
