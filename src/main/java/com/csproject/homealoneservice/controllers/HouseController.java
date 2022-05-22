@@ -81,7 +81,6 @@ public class HouseController {
         try {
             ObjectMapper mapper = new ObjectMapper();
             HouseEntity modelDTO = mapper.readValue(houseBody, HouseEntity.class);
-           logger.info(modelDTO.getHouseName());
            if(modelDTO != null){
                return new  ResponseEntity<>(houseService.insertHouse(modelDTO,file), HttpStatus.OK);
            }else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -104,4 +103,6 @@ public class HouseController {
                 return new ResponseEntity(houseService.findAllHouseByname(name), HttpStatus.OK);
             }else return new ResponseEntity(name+" Not found!!! ", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+
 }
