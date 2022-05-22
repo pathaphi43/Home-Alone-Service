@@ -10,4 +10,6 @@ import java.util.List;
 public interface ReviewsRepository extends JpaRepository<ReviewsEntity,Integer> {
 
     List<ReviewsEntity> findByRid(Integer id);
+
+    List<ReviewsEntity> findAllByTid(Integer id);
 }

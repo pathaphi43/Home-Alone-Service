@@ -52,6 +52,11 @@ public class ReviewsService {
        return reviewsDTOS;
     }
 
+    public List<ReviewsEntity> queryReviewByTid(Integer tid){
+        List<ReviewsEntity> reviewsEntities = reviewsRepository.findAllByTid(tid);
+        return reviewsEntities;
+    }
+
     public List<PreReviewDTO> queryHousePreReviewByTid(Integer tid,Integer status){
        List<PreReviewDTO>  preReviewDTO=new ArrayList<>();
       List<RentingHouseEntity> rentings =  rentingHouseRepository.findAllByTidAndRentingStatus(tid,status);

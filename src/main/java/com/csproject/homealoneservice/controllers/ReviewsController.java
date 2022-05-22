@@ -39,6 +39,12 @@ public class ReviewsController {
         return new ResponseEntity<>(reviewsService.queryReviewByHid(id), HttpStatus.OK);
     }
 
+    @GetMapping("/review-tid/{tid}")
+    public ResponseEntity<List<ReviewsEntity>> findReviewsByHouseTid(@PathVariable("tid") Integer tid){
+        return new ResponseEntity<>(reviewsService.queryReviewByTid(tid), HttpStatus.OK);
+    }
+
+
     @PostMapping(value = "/pre-review-info",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<List<PreReviewDTO>> editPaymentTenantWater(@RequestParam("tid")int tid,@RequestParam("status")int status){
         return new ResponseEntity<>(reviewsService.queryHousePreReviewByTid(tid,status),HttpStatus.OK);
