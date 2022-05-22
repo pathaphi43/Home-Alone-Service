@@ -107,7 +107,7 @@ public class HouseService {
         house.setHouseDeposit(houseBody.getHouseDeposit());
         house.setHouseInsurance(houseBody.getHouseInsurance());
         house.setHouseStatus(HouseEnum.HOUSE_FIRST_INSERT.getStatus());
-        return house;
+        return houseRepository.save(house);
     }
 
     public HouseDTO queryHouseAndImage(Integer id){
