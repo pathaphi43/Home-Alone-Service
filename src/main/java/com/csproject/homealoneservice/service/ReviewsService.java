@@ -56,8 +56,10 @@ public class ReviewsService {
        List<PreReviewDTO>  preReviewDTO=new ArrayList<>();
       List<RentingHouseEntity> rentings =  rentingHouseRepository.findAllByTidAndRentingStatus(tid,status);
       for (RentingHouseEntity renting:rentings){
-       HouseEntity house =  houseRepository.findById(renting.getHid()).get();
-       preReviewDTO.add(new PreReviewDTO(house,renting));
+          if(reviewsRepository.findByRid(renting.getRid()).isEmpty()){
+              HouseEntity house =  houseRepository.findById(renting.getHid()).get();
+              preReviewDTO.add(new PreReviewDTO(house,renting));
+          }
       }
       return  preReviewDTO;
     }
@@ -88,9 +90,6 @@ public class ReviewsService {
                 }
             }
         }
-
-
-
         return reviews;
     }
 
