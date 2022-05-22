@@ -8,6 +8,7 @@ import com.csproject.homealoneservice.entity.RentingHouseEntity;
 import com.csproject.homealoneservice.entity.ReviewsEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,4 +39,17 @@ public class ReviewsService {
        }
        return reviewsDTOS;
     }
+
+    public ReviewsEntity saveReview(ReviewsEntity reviewBody, MultipartFile file){
+        ReviewsEntity reviewsEntity = new ReviewsEntity();
+        reviewsEntity.setReviewsScore(reviewBody.getReviewsScore());
+        reviewsEntity.setReviewsText(reviewBody.getReviewsText());
+        reviewsEntity.setReviewsStatus(1);
+        reviewsEntity.setRid(reviewBody.getRid());
+        reviewsEntity.setTid(reviewBody.getTid());
+        reviewsEntity.setReviewsDate(reviewBody.getReviewsDate());
+        return reviewsEntity;
+    }
+
+
 }

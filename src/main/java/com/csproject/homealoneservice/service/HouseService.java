@@ -2,17 +2,22 @@ package com.csproject.homealoneservice.service;
 
 import com.csproject.homealoneservice.dao.*;
 import com.csproject.homealoneservice.dto.HouseDTO;
+import com.csproject.homealoneservice.dto.UploadFileDTO;
 import com.csproject.homealoneservice.entity.HouseEntity;
 import com.csproject.homealoneservice.entity.RentalHouseImageEntity;
 import com.csproject.homealoneservice.entity.RentingHouseEntity;
 import com.csproject.homealoneservice.enumeration.HouseEnum;
 import com.mysql.cj.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.awt.print.Pageable;
+import java.lang.management.MemoryUsage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +30,9 @@ public class HouseService {
 
     @Autowired
     RentalHouseImageRepository rentalHouseImageRepository;
+
+    @Autowired
+    FileUpload fileUpload;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -70,7 +78,7 @@ public class HouseService {
         return houseDTO;
     }
 
-    public  HouseEntity insertHouse(HouseEntity houseBody){
+    public  HouseEntity insertHouse(HouseEntity houseBody, @Nullable MultipartFile file){
         HouseEntity house = new HouseEntity();
         house.setMid(houseBody.getMid());
         house.setHouseName(houseBody.getHouseName());
@@ -78,7 +86,12 @@ public class HouseService {
         house.setHouseProvince(houseBody.getHouseProvince());
         house.setHouseDistrict(houseBody.getHouseDistrict());
         house.setHouseZipcode(house.getHouseZipcode());
-        house.setHouseImage(HouseEnum.HOUSE_FIRST_INSERT.getImagePath());
+        ResponseEntity<UploadFileDTO> response = null ;
+        if(file != null){
+            response = fileUpload.uploadProfile(file);
+        }
+        if(response != null) house.setHouseImage(response.getBody().getImgPath());
+        else house.setHouseImage(HouseEnum.HOUSE_FIRST_INSERT.getImagePath());
         house.setHouseType(houseBody.getHouseType());
         house.setHouseFloors(houseBody.getHouseFloors());
         house.setHouseBedroom(houseBody.getHouseBedroom());
@@ -94,7 +107,7 @@ public class HouseService {
         house.setHouseDeposit(houseBody.getHouseDeposit());
         house.setHouseInsurance(houseBody.getHouseInsurance());
         house.setHouseStatus(HouseEnum.HOUSE_FIRST_INSERT.getStatus());
-        return houseRepository.save(house);
+        return house;
     }
 
     public HouseDTO queryHouseAndImage(Integer id){
