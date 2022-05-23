@@ -3,6 +3,7 @@ package com.csproject.homealoneservice.controllers;
 import com.csproject.homealoneservice.dto.ConfirmRentDTO;
 import com.csproject.homealoneservice.dto.PaymentDTO;
 import com.csproject.homealoneservice.dto.PaymentSearchDTO;
+import com.csproject.homealoneservice.dto.PaymentSummaryDTO;
 import com.csproject.homealoneservice.entity.HouseEntity;
 import com.csproject.homealoneservice.entity.ManagerEntity;
 import com.csproject.homealoneservice.entity.PaymentEntity;
@@ -136,5 +137,13 @@ public class PaymentController {
         } else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @PostMapping(value = "/payment-summary",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<List<PaymentSummaryDTO>> paymentSummary(@RequestParam("mid")int mid,@RequestParam("dateFrom")String dateFrom,@RequestParam("dateTo")String dateTo){
+        List<PaymentSummaryDTO> payments=  paymentService.paymentSummary(mid,dateFrom,dateTo);
+            if(payments != null){
+                return new ResponseEntity<>(payments, HttpStatus.OK);
+            } else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+
+    }
 
 }

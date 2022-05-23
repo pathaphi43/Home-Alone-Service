@@ -3,6 +3,7 @@ package com.csproject.homealoneservice.service;
 import com.csproject.homealoneservice.dao.*;
 import com.csproject.homealoneservice.dto.PaymentDTO;
 import com.csproject.homealoneservice.dto.PaymentSearchDTO;
+import com.csproject.homealoneservice.dto.PaymentSummaryDTO;
 import com.csproject.homealoneservice.dto.UploadFileDTO;
 import com.csproject.homealoneservice.entity.*;
 import com.csproject.homealoneservice.enumeration.PayStatusEnum;
@@ -190,15 +191,18 @@ public class PaymentService {
         return paymentDTOS;
     }
 
-    public List<PaymentEntity> paymentSummary(int mid,String dateFrom,String dateTo){
+    public List<PaymentSummaryDTO> paymentSummary(int mid,String dateFrom,String dateTo){
          List<HouseEntity> houses = houseRepository.findByMid(mid);
         Timestamp start = Timestamp.valueOf(dateFrom);
         Timestamp end = Timestamp.valueOf(dateTo);
-        List<PaymentEntity> payments = null;
+        List<PaymentSummaryDTO> payments = new ArrayList<>();
          for(HouseEntity house:houses){
            List<RentingHouseEntity>  rentings = rentingHouseRepository.findByHid(house.getHid());
            for (RentingHouseEntity renting:rentings){
-            payments = paymentRepository.findAllByRidAndInstallmentBetween(renting.getRid(),start,end);
+            List<PaymentEntity> payment =   paymentRepository.findAllByRidAndPayHouseStatusAndInstallmentBetween(renting.getRid(),PayStatusEnum.Success_Status.getStatus(),start,end);
+               if(!payment.isEmpty()){
+                   payments.add( new PaymentSummaryDTO(house,payment));
+               }
            }
          }
         return payments;
