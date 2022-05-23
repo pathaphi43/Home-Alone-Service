@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.19.0.final using JasperReports Library version 6.19.0-646c68931cebf1a58bc65c4359d1f0ca223c5e94  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MySummaryReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6eea0f77-717a-4559-85d9-3d9f85c12070">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.jrdax"/>
+	<subDataset name="Dataset1" uuid="b12bc025-72c9-4094-b674-6e05465de745">
+		<property name="com.jaspersoft.studio.data.sql.tables">
+			<![CDATA[cHJvajYyX2hvbWVhbG9uZS5ob3VzZSBBUyAsMTc5LDExOSwzYjFjZTIyNy0zOGNlLTRhNDYtOWNl
+NC01OTllMmU0N2JkOTk7]]>
+		</property>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.jrdax"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT mid,
+	hid,
+	house_name
+FROM proj62_homealone.house]]>
+		</queryString>
+		<field name="mid" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.name" value="mid"/>
+			<property name="com.jaspersoft.studio.field.label" value="mid"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="house"/>
+		</field>
+		<field name="hid" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.name" value="hid"/>
+			<property name="com.jaspersoft.studio.field.label" value="hid"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="house"/>
+		</field>
+		<field name="house_name" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="house_name"/>
+			<property name="com.jaspersoft.studio.field.label" value="house_name"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="house"/>
+		</field>
+	</subDataset>
+	<queryString language="SQL">
+		<![CDATA[]]>
+	</queryString>
+	<field name="managerFirstname" class="java.lang.String"/>
+	<field name="managerLastname" class="java.lang.String"/>
+	<field name="houseName" class="java.lang.String"/>
+	<field name="titleFields" class="java.lang.String"/>
+	<field name="dateForm" class="java.lang.String"/>
+	<field name="dateTo" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="84" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="40" width="555" height="20" uuid="835f2b3a-4e07-4687-ab70-f8428362788e"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{managerFirstname} +" "+$F{managerLastname}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="555" height="30" uuid="29a7301f-59ca-41a3-a833-46a907c48dc8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Angsana New" size="22"/>
+				</textElement>
+				<textFieldExpression><![CDATA["รายรับระหว่างเดือน "+$F{dateForm}+"-"+$F{dateTo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="126" splitType="Stretch">
+			<staticText>
+				<reportElement x="83" y="0" width="100" height="30" uuid="c483eb1c-2a40-4ffc-ade7-29fea207c01b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6483d52a-c03b-40ca-9cf2-b4427ff3a385"/>
+				</reportElement>
+				<text><![CDATA[houseName]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="246" splitType="Stretch">
+			<textField>
+				<reportElement x="-1" y="-1" width="100" height="21" uuid="98d60a13-0c9e-4374-afe2-c7ae178d9732">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6483d52a-c03b-40ca-9cf2-b4427ff3a385"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{houseName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<staticText>
+				<reportElement x="-1" y="0" width="100" height="30" uuid="8e26fcc9-7d5e-4209-b2e5-2e46d00cd67d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Angsana New" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[รวมทั้งสิ้น]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

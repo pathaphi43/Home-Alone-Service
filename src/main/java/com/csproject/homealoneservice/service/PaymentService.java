@@ -134,6 +134,7 @@ public class PaymentService {
         payment.setPayHouseImg(response.getBody().getImgPath());
         return paymentRepository.save(payment);
     }
+
     public PaymentEntity tenantPaymentWater(int id,String date, MultipartFile file){
         PaymentEntity payment =  paymentRepository.findById(id).get();
         payment.setPayWaterStatus(PayStatusEnum.Prepare_Status.getStatus());
@@ -145,6 +146,7 @@ public class PaymentService {
         payment.setPayWaterImg(response.getBody().getImgPath());
         return paymentRepository.save(payment);
     }
+
     public PaymentEntity tenantPaymentElectric(int id,String date, MultipartFile file){
         PaymentEntity payment =  paymentRepository.findById(id).get();
         payment.setPayElecStatus(PayStatusEnum.Prepare_Status.getStatus());
@@ -186,5 +188,20 @@ public class PaymentService {
             paymentDTOS.add(new PaymentDTO(house, tenant, payment));
         }
         return paymentDTOS;
+    }
+
+    public List<PaymentEntity> paymentSummary(int mid,String dateFrom,String dateTo){
+         List<HouseEntity> houses = houseRepository.findByMid(mid);
+        Timestamp start = Timestamp.valueOf(dateFrom);
+        Timestamp end = Timestamp.valueOf(dateTo);
+        List<PaymentEntity> payments = null;
+         for(HouseEntity house:houses){
+           List<RentingHouseEntity>  rentings= rentingHouseRepository.findByHid(house.getHid());
+           for (RentingHouseEntity renting:rentings){
+            payments = paymentRepository.findAllByRidAndIAndInstallmentBetween(mid,start,end);
+
+           }
+         }
+        return payments;
     }
 }

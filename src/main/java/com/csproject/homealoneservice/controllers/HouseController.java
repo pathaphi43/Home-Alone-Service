@@ -76,6 +76,11 @@ public class HouseController {
         return new ResponseEntity(rentingHouseService.cancelRentHouse(id), HttpStatus.OK);
     }
 
+    @GetMapping("/cancel-house-after-rent/{id}")
+    public ResponseEntity<HouseEntity> cancel(@PathVariable("id") int id) {
+        return new ResponseEntity(rentingHouseService.cancelHouseAfterRent(id), HttpStatus.OK);
+    }
+
     @PostMapping(value = "/insert",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<HouseEntity> insertHouse(@RequestParam("houseData") String houseBody, @RequestParam("file") @Nullable MultipartFile file){
         try {

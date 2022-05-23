@@ -139,6 +139,18 @@ public class RentingHouseService {
         return houseService.houseRepository.save(house);
     }
 
+    public HouseEntity cancelHouseAfterRent(Integer id){
+        RentingHouseEntity rentingHouse = rentingHouseRepository.findByHidAndRentingStatus(id,StatusEnum.Normal_Status.getStatus());
+        rentingHouse.setRid(rentingHouse.getRid());
+        rentingHouse.setRentingStatus(StatusEnum.Cancel_Status.getStatus());
+        rentingHouse.setRentingCheckOut(Timestamp.valueOf(zdt.toLocalDateTime()));
+        HouseEntity house = houseService.findById(id).get();
+        house.setHid(id);
+        house.setHouseStatus(HouseEnum.HOUSE_FIRST_INSERT.getStatus());
+        rentingHouseRepository.save(rentingHouse);
+        return houseService.houseRepository.save(house);
+    }
+
     public String getFormatDate() {
         return formatDate;
     }
