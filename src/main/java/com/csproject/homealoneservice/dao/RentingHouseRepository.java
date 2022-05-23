@@ -17,4 +17,5 @@ public interface RentingHouseRepository extends JpaRepository<RentingHouseEntity
     List<RentingHouseEntity> findAllByHid(Integer hid);
     List<RentingHouseEntity> findAllByHidAndRentingStatusIn(Integer hid,List<Integer> status);
     List<RentingHouseEntity> findAllByTidAndRentingStatusIn(Integer tid,List<Integer> status);
+//    List<RentingHouseEntity> findAllByTidAndRentingStatus(Integer tid,Integer status);
 }

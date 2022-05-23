@@ -111,7 +111,7 @@ public class PaymentService {
     public List<PaymentDTO> findAllPaymentByHouseTenantId(Integer tid) {
         List<PaymentDTO> paymentDTOS = new ArrayList<>();
 //        ManagerEntity manager = managerRepository.findById(mid).get();
-        List<RentingHouseEntity> rentingHouses = rentingHouseRepository.findAllByTidAndRentingStatusIn(tid, rentingStatusList);
+        List<RentingHouseEntity> rentingHouses = rentingHouseRepository.findAllByTidAndRentingStatus(tid,StatusEnum.Normal_Status.getStatus());
         TenantEntity tenant = tenantRepository.findById(tid).get();
         for (RentingHouseEntity rent : rentingHouses) {
             HouseEntity house = houseRepository.findById(rent.getHid()).get();
