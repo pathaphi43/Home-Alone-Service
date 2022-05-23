@@ -14,7 +14,7 @@ public interface PaymentRepository extends JpaRepository<PaymentEntity,Integer>,
 
   List<PaymentEntity> findAll(Specification<PaymentEntity> specification);
 
-  List<PaymentEntity> findAllByRidAndIAndInstallmentBetween(int mid, Date dateFrom, Date dateTo);
+  List<PaymentEntity> findAllByRidAndInstallmentBetween(int rid, Date dateFrom, Date dateTo);
 
 //  List<PaymentEntity> findAllByAndInstallmentBetween();
 }

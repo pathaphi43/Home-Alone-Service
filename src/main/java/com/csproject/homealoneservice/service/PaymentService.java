@@ -196,10 +196,9 @@ public class PaymentService {
         Timestamp end = Timestamp.valueOf(dateTo);
         List<PaymentEntity> payments = null;
          for(HouseEntity house:houses){
-           List<RentingHouseEntity>  rentings= rentingHouseRepository.findByHid(house.getHid());
+           List<RentingHouseEntity>  rentings = rentingHouseRepository.findByHid(house.getHid());
            for (RentingHouseEntity renting:rentings){
-            payments = paymentRepository.findAllByRidAndIAndInstallmentBetween(mid,start,end);
-
+            payments = paymentRepository.findAllByRidAndInstallmentBetween(renting.getRid(),start,end);
            }
          }
         return payments;
