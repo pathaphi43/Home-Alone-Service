@@ -133,6 +133,16 @@ public class HouseController {
         return new ResponseEntity<>(houseService.dismissHouseByHid(hid),HttpStatus.OK);
     }
 
+    @DeleteMapping("/delete-image/{pid}")
+    public ResponseEntity<?> deleteImageByPid(@PathVariable("pid") int pid) {
+        try{
+            houseService.deleteImageByPid(pid);
+            return ResponseEntity.ok().build();
+        }
+        catch (EmptyResultDataAccessException e){
+            return ResponseEntity.notFound().build();
+        }
+    }
     @DeleteMapping("/delete-house/{hid}")
     public ResponseEntity<?> deleteByid(@PathVariable("hid") int hid) {
         try{

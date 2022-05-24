@@ -92,6 +92,10 @@ public class HouseService {
         return houseDTO;
     }
 
+    public void deleteImageByPid(int pid){
+         rentalHouseImageRepository.deleteById(pid);
+    }
+
     public List<HouseDTO> queryAllHouseAndImageAndStatusIs(Integer mid,Integer status){
         List<HouseDTO> houseDTO = new ArrayList<>();
         List<HouseEntity> houses = houseRepository.findAllByMidAndHouseStatusIs(mid,status);
