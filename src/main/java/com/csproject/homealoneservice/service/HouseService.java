@@ -110,6 +110,39 @@ public class HouseService {
         return houseRepository.save(house);
     }
 
+    public  HouseEntity editHouse(HouseEntity houseBody, @Nullable MultipartFile file){
+        HouseEntity house = new HouseEntity();
+        house.setHid(houseBody.getHid());
+        house.setMid(houseBody.getMid());
+        house.setHouseName(houseBody.getHouseName());
+        house.setHouseAddress(houseBody.getHouseAddress());
+        house.setHouseProvince(houseBody.getHouseProvince());
+        house.setHouseDistrict(houseBody.getHouseDistrict());
+        house.setHouseZipcode(house.getHouseZipcode());
+        ResponseEntity<UploadFileDTO> response = null ;
+        if(file != null){
+            response = fileUpload.uploadProfile(file);
+        }
+        if(response != null) house.setHouseImage(response.getBody().getImgPath());
+        else house.setHouseImage(houseBody.getHouseImage());
+        house.setHouseType(houseBody.getHouseType());
+        house.setHouseFloors(houseBody.getHouseFloors());
+        house.setHouseBedroom(houseBody.getHouseBedroom());
+        house.setHouseBathroom(houseBody.getHouseBathroom());
+        house.setHouseLivingroom(houseBody.getHouseLivingroom());
+        house.setHouseKitchen(houseBody.getHouseKitchen());
+        house.setHouseArea(houseBody.getHouseArea());
+        house.setHouseLatitude(houseBody.getHouseLatitude());
+        house.setHouseLongitude(houseBody.getHouseLongitude());
+        house.setHouseElectric(houseBody.getHouseElectric());
+        house.setHouseWater(houseBody.getHouseWater());
+        house.setHouseRent(houseBody.getHouseRent());
+        house.setHouseDeposit(houseBody.getHouseDeposit());
+        house.setHouseInsurance(houseBody.getHouseInsurance());
+        house.setHouseStatus(houseBody.getHouseStatus());
+        return houseRepository.save(house);
+    }
+
     public HouseDTO queryHouseAndImage(Integer id){
         HouseDTO houseDTO = new HouseDTO();
         Optional<HouseEntity> houses = findById(id);
@@ -156,6 +189,17 @@ public class HouseService {
     public List<HouseEntity> findAllHouseByname(String name) {
         return houseRepository.findAll(HouseSpecification.likeHouseName(name));
     }
+
+    public HouseEntity dismissHouseByHid(Integer hid){
+       HouseEntity house = houseRepository.findById(hid).get();
+       house.setHouseStatus(HouseEnum.House_Dismiss.getStatus());
+       return houseRepository.save(house);
+    }
+
+    public void deleteHouseByHid(Integer hid){
+     houseRepository.deleteById(hid);
+    }
+
 
     public HouseEntity rentHouse(Integer id){
         HouseEntity house = new HouseEntity();

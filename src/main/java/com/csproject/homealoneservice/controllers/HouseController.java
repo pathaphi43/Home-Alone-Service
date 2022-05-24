@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
@@ -102,6 +103,36 @@ public class HouseController {
 
     }
 
+    @PostMapping(value = "/edit",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<HouseEntity> editHouse(@RequestParam("houseData") String houseBody, @RequestParam("file") @Nullable MultipartFile file){
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            HouseEntity modelDTO = mapper.readValue(houseBody, HouseEntity.class);
+            if(modelDTO != null){
+                return new  ResponseEntity<>(houseService.editHouse(modelDTO,file), HttpStatus.OK);
+            }else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    @GetMapping("/dismiss-house/{hid}")
+    public ResponseEntity<HouseEntity> dismissByid(@PathVariable("hid") int hid) {
+        return new ResponseEntity<>(houseService.dismissHouseByHid(hid),HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete-house/{hid}")
+    public ResponseEntity<?> deleteByid(@PathVariable("hid") int hid) {
+        try{
+            houseService.deleteHouseByHid(hid);
+            return ResponseEntity.noContent().build();
+        }
+        catch (EmptyResultDataAccessException e){
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @GetMapping("/lazy/{id}")
     public List<HouseEntity> findAllHouseLazy(@PathVariable("id") int id) {
