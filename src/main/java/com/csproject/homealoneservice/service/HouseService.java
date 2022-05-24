@@ -9,6 +9,8 @@ import com.csproject.homealoneservice.entity.RentalHouseImageEntity;
 import com.csproject.homealoneservice.entity.RentingHouseEntity;
 import com.csproject.homealoneservice.enumeration.HouseEnum;
 import com.mysql.cj.Session;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
@@ -25,7 +27,7 @@ import java.util.Optional;
 
 @Service
 public class HouseService {
-
+    private final Logger logger = LogManager.getLogger(this.getClass().getName());
     @Autowired
     HouseRepository houseRepository;
 
@@ -67,17 +69,18 @@ public class HouseService {
         return houseDTO;
     }
 
-    public ResponseEntity<UploadMultipartFileDTO> saveImage(int hid,MultipartFile[] file){
+    public UploadMultipartFileDTO saveImage(int hid,MultipartFile[] file){
         ResponseEntity<UploadMultipartFileDTO> response = fileUpload.uploadMultipartFile(file,hid);
         if(response != null){
-        RentalHouseImageEntity houseImage = new RentalHouseImageEntity();
+            RentalHouseImageEntity houseImage ;
         for (String path:response.getBody().getImgPath()){
+            houseImage = new RentalHouseImageEntity();
             houseImage.setImageHousePath(path);
             houseImage.setHid(hid);
             rentalHouseImageRepository.save(houseImage);
+            }
         }
-        }
-        return response;
+        return response.getBody();
     }
 
     public HouseDTO queryHouseAndImageByhid(Integer hid){
