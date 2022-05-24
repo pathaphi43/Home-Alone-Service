@@ -101,6 +101,24 @@ public class ManagerService {
 
     }
 
+    public ManagerEntity editManager(ManagerEntity managerBody) {
+        ManagerEntity manager = managerRepository.findById(managerBody.getMid()).get();
+        if (manager != null) {
+            manager.setManagerUsername(manager.getManagerUsername());
+            manager.setManagerPassword(manager.getManagerPassword());
+            manager.setManagerFirstname(managerBody.getManagerFirstname());
+            manager.setManagerLastname(managerBody.getManagerLastname());
+            manager.setManagerOffice(managerBody.getManagerOffice());
+            manager.setManagerFacebook(managerBody.getManagerFacebook());
+            manager.setManagerLineid(managerBody.getManagerLineid());
+            manager.setManagerPhone(managerBody.getManagerPhone());
+            manager.setManagerImage(manager.getManagerImage());
+            manager.setManagerStatus(manager.getManagerStatus());
+            managerRepository.save(manager);
+            return manager;
+        } else return null;
+    }
+
 
     public ManagerEntity saveManager(ManagerEntity managerBody) {
         ManagerEntity manager = new ManagerEntity();

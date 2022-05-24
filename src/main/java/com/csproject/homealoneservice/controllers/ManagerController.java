@@ -60,6 +60,16 @@ public class ManagerController {
 //        }else return new ResponseEntity("อัพโหลดไฟล์ไม่สำเร็จ", HttpStatus.INTERNAL_SERVER_ERROR);
 //    }
 
+    @PostMapping(value = "/edit",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<ManagerEntity> editManager(@RequestBody ManagerEntity managerBody){
+        ManagerEntity result = managerService.editManager(managerBody);
+        if( result != null){
+            return new ResponseEntity(result,HttpStatus.OK);
+        }else return new ResponseEntity("แก้ไขไม่สำเร็จ", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @PostMapping(value = "/signup",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
