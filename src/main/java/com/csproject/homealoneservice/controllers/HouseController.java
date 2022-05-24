@@ -4,6 +4,7 @@ package com.csproject.homealoneservice.controllers;
 import com.csproject.homealoneservice.dto.ConfirmRentDTO;
 import com.csproject.homealoneservice.dto.HouseDTO;
 import com.csproject.homealoneservice.dto.RentDTO;
+import com.csproject.homealoneservice.dto.UploadMultipartFileDTO;
 import com.csproject.homealoneservice.entity.HouseEntity;
 import com.csproject.homealoneservice.entity.RentingHouseEntity;
 import com.csproject.homealoneservice.service.HouseService;
@@ -61,6 +62,15 @@ public class HouseController {
     @GetMapping("/HouseAndImage/{id}")
     public ResponseEntity<List<HouseDTO>> findHouseAndImages(@PathVariable("id") int id){
         return new ResponseEntity(houseService.queryHouseAndImage(id), HttpStatus.OK);
+    }
+    @PostMapping(value = "/save-image",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<UploadMultipartFileDTO> saveImagesHouse(@RequestParam("hid") int hid, @RequestParam("files")  MultipartFile[] file){
+        return new ResponseEntity(houseService.saveImage(hid,file),HttpStatus.OK);
+    }
+
+    @GetMapping("/house-image/{hid}")
+    public ResponseEntity<List<HouseDTO>> findHouseAndImage(@PathVariable("hid") int hid){
+        return new ResponseEntity(houseService.queryHouseAndImageByhid(hid), HttpStatus.OK);
     }
 
     @GetMapping("/manager/{id}")

@@ -3,6 +3,7 @@ package com.csproject.homealoneservice.service;
 import com.csproject.homealoneservice.dao.*;
 import com.csproject.homealoneservice.dto.HouseDTO;
 import com.csproject.homealoneservice.dto.UploadFileDTO;
+import com.csproject.homealoneservice.dto.UploadMultipartFileDTO;
 import com.csproject.homealoneservice.entity.HouseEntity;
 import com.csproject.homealoneservice.entity.RentalHouseImageEntity;
 import com.csproject.homealoneservice.entity.RentingHouseEntity;
@@ -63,6 +64,28 @@ public class HouseService {
                     house.getHouseLatitude(),house.getHouseLongitude(),house.getHouseElectric(),house.getHouseWater(),house.getHouseRent(),house.getHouseDeposit(),house.getHouseInsurance(),house.getHouseStatus(),
                     rentalHouseImageRepository.findByHid(house.getHid())));
         }
+        return houseDTO;
+    }
+
+    public ResponseEntity<UploadMultipartFileDTO> saveImage(int hid,MultipartFile[] file){
+        ResponseEntity<UploadMultipartFileDTO> response = fileUpload.uploadMultipartFile(file,hid);
+        if(response != null){
+        RentalHouseImageEntity houseImage = new RentalHouseImageEntity();
+        for (String path:response.getBody().getImgPath()){
+            houseImage.setImageHousePath(path);
+            houseImage.setHid(hid);
+            rentalHouseImageRepository.save(houseImage);
+        }
+        }
+        return response;
+    }
+
+    public HouseDTO queryHouseAndImageByhid(Integer hid){
+        HouseEntity house = houseRepository.findById(hid).get();
+        HouseDTO houseDTO = new HouseDTO(house.getHid(),house.getMid(),house.getHouseName(),house.getHouseAddress(),house.getHouseProvince(),house.getHouseDistrict(),house.getHouseZipcode(),
+                    house.getHouseImage(),house.getHouseType(),house.getHouseFloors(),house.getHouseBedroom(),house.getHouseBathroom(),house.getHouseLivingroom(),house.getHouseKitchen(),house.getHouseArea(),
+                    house.getHouseLatitude(),house.getHouseLongitude(),house.getHouseElectric(),house.getHouseWater(),house.getHouseRent(),house.getHouseDeposit(),house.getHouseInsurance(),house.getHouseStatus(),
+                    rentalHouseImageRepository.findByHid(house.getHid()));
         return houseDTO;
     }
 
