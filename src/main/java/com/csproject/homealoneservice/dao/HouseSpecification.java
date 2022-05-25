@@ -8,11 +8,11 @@ public interface HouseSpecification<T> {
         return (root, cq, cb) -> cb.like(root.get("houseName"), "%" + houseName + "%");
     }
 
-//    static Specification<MIRTransaction> likeMidOrTid(@NotNull String midOrTid) {
-//        return (root, cq, cb) ->
-//                cb.or(
-//                        cb.like(root.get("merchantId"), "%" + midOrTid + "%"),
-//                        cb.like(root.get("terminalId"), "%" + midOrTid + "%")
-//                );
-//    }
+    static Specification<HouseEntity> likeprovinceOramphure(String province,String amphure) {
+        return (root, cq, cb) ->
+                cb.or(
+                        cb.like(root.get("houseProvince"), "%" + province + "%"),
+                        cb.like(root.get("houseDistrict"), "%" + amphure + "%")
+                );
+    }
 }

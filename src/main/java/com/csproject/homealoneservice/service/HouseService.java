@@ -220,6 +220,18 @@ public class HouseService {
         return houseRepository.findAll(HouseSpecification.likeHouseName(name));
     }
 
+    public List<HouseEntity> findAllProvinceAndAmphure(String province,String amphure) {
+        return houseRepository.findAll(HouseSpecification.likeprovinceOramphure(province,amphure));
+    }
+
+    public List<HouseEntity> findAllByHouseStatusIs(int status) {
+        return houseRepository.findAllByHouseStatusIs(status);
+    }
+
+    public List<HouseEntity> findAllByHouseStatusIsNot(int status) {
+        return houseRepository.findAllByHouseStatusIsNot(status);
+    }
+
     public HouseEntity dismissHouseByHid(Integer hid){
        HouseEntity house = houseRepository.findById(hid).get();
        house.setHouseStatus(HouseEnum.House_Dismiss.getStatus());

@@ -143,6 +143,7 @@ public class HouseController {
             return ResponseEntity.notFound().build();
         }
     }
+
     @DeleteMapping("/delete-house/{hid}")
     public ResponseEntity<?> deleteByid(@PathVariable("hid") int hid) {
         try{
@@ -161,9 +162,30 @@ public class HouseController {
 
     @GetMapping("/search/{name}")
     public ResponseEntity<List<HouseEntity>> findBynames(@PathVariable("name") String name) {
-            if(!houseService.findAllHouseByname(name).isEmpty()){
-                return new ResponseEntity(houseService.findAllHouseByname(name), HttpStatus.OK);
-            }else return new ResponseEntity(name+" Not found!!! ", HttpStatus.INTERNAL_SERVER_ERROR);
+        if(!houseService.findAllHouseByname(name).isEmpty()){
+            return new ResponseEntity(houseService.findAllHouseByname(name), HttpStatus.OK);
+        }else return new ResponseEntity(name+" Not found!!! ", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @GetMapping("/search-status-like/{status}")
+    public ResponseEntity<List<HouseEntity>> searchStatusLike(@PathVariable("status") int status) {
+            return new ResponseEntity(houseService.findAllByHouseStatusIs(status), HttpStatus.OK);
+    }
+
+    @GetMapping("/search-status-not-like/{status}")
+    public ResponseEntity<List<HouseEntity>> searchStatusNotLike(@PathVariable("status") int status) {
+        return new ResponseEntity(houseService.findAllByHouseStatusIsNot(status), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/search-province-amphure",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<List<HouseEntity>> searchProvinceOrAmphure(@RequestParam("province")@Nullable String province,@RequestParam("amphure")@Nullable String amphure){
+        logger.info(province);
+        logger.info(amphure);
+       List<HouseEntity> house = houseService.findAllProvinceAndAmphure(province,amphure);
+       if (!house.isEmpty()){
+           return new ResponseEntity<>(house, HttpStatus.OK);
+       }else {return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);}
+
     }
 
 
