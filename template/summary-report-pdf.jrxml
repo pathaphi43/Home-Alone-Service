@@ -26,7 +26,7 @@
             <textField>
                 <reportElement x="0" y="20" width="555" height="79" uuid="85e69527-e010-4986-a0af-963e68df25fa"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle">
-                    <font fontName="Angsana New" size="22" isBold="true"/>
+                    <font fontName="Tahoma" size="22" isBold="true"/>
                 </textElement>
                 <textFieldExpression><![CDATA["Income"+$F{dateFrom} +"-"+$F{dateTo}]]></textFieldExpression>
             </textField>
@@ -43,7 +43,7 @@
                     <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                 </box>
                 <textElement verticalAlignment="Middle">
-                    <font fontName="Angsana New" size="14" isBold="true"/>
+                    <font fontName="Tahoma" size="10" isBold="true"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$F{dateCreate}]]></textFieldExpression>
             </textField>
@@ -56,7 +56,7 @@
                     <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                 </box>
                 <textElement textAlignment="Left" verticalAlignment="Middle">
-                    <font fontName="Angsana New" size="14" isBold="true"/>
+                    <font fontName="Tahoma" size="12" isBold="true"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$F{managerFirstname}+" "+$F{managerLastname}]]></textFieldExpression>
             </textField>
@@ -69,7 +69,7 @@
                     <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                 </box>
                 <textElement verticalAlignment="Middle">
-                    <font fontName="Angsana New" size="14" isBold="true"/>
+                    <font fontName="Tahoma" size="12" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Name]]></text>
             </staticText>
@@ -82,7 +82,7 @@
                     <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                 </box>
                 <textElement verticalAlignment="Middle">
-                    <font fontName="Angsana New" size="14" isBold="true"/>
+                    <font fontName="Tahoma" size="12" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Create Date]]></text>
             </staticText>
@@ -103,7 +103,7 @@
                     <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                 </box>
                 <textElement textAlignment="Center" verticalAlignment="Middle">
-                    <font fontName="Angsana New" size="16" isBold="true"/>
+                    <font fontName="Tahoma" size="13" isBold="true"/>
                 </textElement>
                 <text><![CDATA[House]]></text>
             </staticText>
@@ -120,7 +120,7 @@
                     <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                 </box>
                 <textElement textAlignment="Center" verticalAlignment="Middle">
-                    <font fontName="Angsana New" size="16" isBold="true"/>
+                    <font fontName="Tahoma" size="13" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Date]]></text>
             </staticText>
@@ -135,7 +135,7 @@
                     <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                 </box>
                 <textElement textAlignment="Center" verticalAlignment="Middle">
-                    <font fontName="Angsana New" size="16" isBold="true"/>
+                    <font fontName="Tahoma" size="13" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Amount]]></text>
             </staticText>
@@ -167,7 +167,7 @@
                                     <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                                 </box>
                                 <textElement verticalAlignment="Middle">
-                                    <font size="10" isBold="false"/>
+                                    <font fontName="Tahoma" size="10" isBold="false"/>
                                 </textElement>
                                 <textFieldExpression><![CDATA[$F{houseName}]]></textFieldExpression>
                             </textField>
