@@ -177,14 +177,25 @@ public class HouseController {
         return new ResponseEntity(houseService.findAllByHouseStatusIsNot(status), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/search-province-amphure",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<List<HouseEntity>> searchProvinceOrAmphure(@RequestParam("province")@Nullable String province,@RequestParam("amphure")@Nullable String amphure){
+    @PostMapping(value = "/search-province-amphure-like",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<List<HouseEntity>> searchProvinceLikeOrAmphureLike(@RequestParam("province")@Nullable String province,@RequestParam("amphure")@Nullable String amphure){
         logger.info(province);
         logger.info(amphure);
-       List<HouseEntity> house = houseService.findAllProvinceAndAmphure(province,amphure);
+       List<HouseEntity> house = houseService.findAllProvinceAndAmphureLike(province,amphure);
        if (!house.isEmpty()){
            return new ResponseEntity<>(house, HttpStatus.OK);
        }else {return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);}
+
+    }
+
+    @PostMapping(value = "/search-province-amphure-is",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<List<HouseEntity>> searchProvinceIsOrAmphureIs(@RequestParam("province")@Nullable String province,@RequestParam("amphure")@Nullable String amphure){
+        logger.info(province);
+        logger.info(amphure);
+        List<HouseEntity> house = houseService.findAllProvinceAndAmphure(province,amphure);
+        if (!house.isEmpty()){
+            return new ResponseEntity<>(house, HttpStatus.OK);
+        }else {return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);}
 
     }
 

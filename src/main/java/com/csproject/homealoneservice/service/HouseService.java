@@ -220,9 +220,14 @@ public class HouseService {
         return houseRepository.findAll(HouseSpecification.likeHouseName(name));
     }
 
-    public List<HouseEntity> findAllProvinceAndAmphure(String province,String amphure) {
+    public List<HouseEntity> findAllProvinceAndAmphureLike(String province,String amphure) {
         return houseRepository.findAll(HouseSpecification.likeprovinceOramphure(province,amphure));
     }
+
+    public List<HouseEntity> findAllProvinceAndAmphure(String province,String amphure) {
+        return houseRepository.findAllByHouseProvinceAndHouseDistrict(province,amphure);
+    }
+
 
     public List<HouseEntity> findAllByHouseStatusIs(int status) {
         return houseRepository.findAllByHouseStatusIs(status);
@@ -271,6 +276,8 @@ public class HouseService {
         house.setHouseStatus(HouseEnum.HOUSE_RENT.getStatus());
         return houseRepository.save(house);
     }
+
+//    public List<HouseEntity>
 
 
 }
