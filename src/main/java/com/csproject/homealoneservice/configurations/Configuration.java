@@ -25,6 +25,28 @@ public class Configuration {
 
     @Value("${homealone.ftp.password}")
     private String FTPPassword;
+    @Value("${templatePath}")
+    private String templatePath;
+
+    @Value("${reportPath}")
+    private String reportPath;
+
+    public String getTemplatePath() {
+        return templatePath;
+    }
+
+    public void setTemplatePath(String templatePath) {
+        this.templatePath = templatePath;
+    }
+
+
+    public String getReportPath() {
+        return reportPath;
+    }
+
+    public void setReportPath(String reportPath) {
+        this.reportPath = reportPath;
+    }
 
     public String getFTPHost() {
         return FTPHost;
