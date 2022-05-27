@@ -1,17 +1,17 @@
 package com.csproject.homealoneservice.service;
 
 import com.csproject.homealoneservice.dao.*;
-import com.csproject.homealoneservice.dto.PaymentDTO;
-import com.csproject.homealoneservice.dto.PaymentSearchDTO;
-import com.csproject.homealoneservice.dto.PaymentSummaryDTO;
-import com.csproject.homealoneservice.dto.UploadFileDTO;
+import com.csproject.homealoneservice.dto.*;
 import com.csproject.homealoneservice.entity.*;
 import com.csproject.homealoneservice.enumeration.PayStatusEnum;
 import com.csproject.homealoneservice.enumeration.StatusEnum;
 import com.csproject.homealoneservice.prepare.PrepareData;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +20,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -52,22 +53,30 @@ public class PaymentService {
     }
 
     public PaymentEntity savePayment(PaymentEntity paymentBody) {
-        PaymentEntity paymentEntity = new PaymentEntity();
-        paymentEntity.setRid(paymentBody.getRid());
-        paymentEntity.setInstallment(paymentBody.getInstallment());
-        paymentEntity.setPayHouseAmount(paymentBody.getPayHouseAmount());
-        paymentEntity.setPayHouseEnd(paymentBody.getPayHouseEnd());
-        paymentEntity.setPayHouseStatus(StatusEnum.Prepare_Status.getStatus());
-        paymentEntity.setPayElecAmount(paymentBody.getPayElecAmount());
-        paymentEntity.setPayElecInmonth(paymentBody.getPayElecInmonth());
-        paymentEntity.setPayElecEnd(paymentBody.getPayElecEnd());
-        paymentEntity.setPayElecStatus(StatusEnum.Prepare_Status.getStatus());
-        paymentEntity.setPayWaterAmount(paymentBody.getPayWaterAmount());
-        paymentEntity.setPayWaterInmonth(paymentBody.getPayWaterInmonth());
-        paymentEntity.setPayWaterEnd(paymentBody.getPayWaterEnd());
-        paymentEntity.setPayWaterStatus(StatusEnum.Prepare_Status.getStatus());
-        return paymentRepository.save(paymentEntity);
+//       List<PaymentEntity> paymentEntities = paymentRepository.findAllByRid(paymentBody.getRid());
+
+//       for(PaymentEntity payment:paymentEntities){
+//           if(payment.getInstallment() != paymentBody.getInstallment()){
+               PaymentEntity paymentEntity = new PaymentEntity();
+               paymentEntity.setRid(paymentBody.getRid());
+               paymentEntity.setInstallment(paymentBody.getInstallment());
+               paymentEntity.setPayHouseAmount(paymentBody.getPayHouseAmount());
+               paymentEntity.setPayHouseEnd(paymentBody.getPayHouseEnd());
+               paymentEntity.setPayHouseStatus(StatusEnum.Prepare_Status.getStatus());
+               paymentEntity.setPayElecAmount(paymentBody.getPayElecAmount());
+               paymentEntity.setPayElecInmonth(paymentBody.getPayElecInmonth());
+               paymentEntity.setPayElecEnd(paymentBody.getPayElecEnd());
+               paymentEntity.setPayElecStatus(StatusEnum.Prepare_Status.getStatus());
+               paymentEntity.setPayWaterAmount(paymentBody.getPayWaterAmount());
+               paymentEntity.setPayWaterInmonth(paymentBody.getPayWaterInmonth());
+               paymentEntity.setPayWaterEnd(paymentBody.getPayWaterEnd());
+               paymentEntity.setPayWaterStatus(StatusEnum.Prepare_Status.getStatus());
+               return paymentRepository.save(paymentEntity);
+//           }else return null;
+//       }
+
     }
+
     public PaymentEntity editRentPayment(PaymentEntity paymentBody) {
         PaymentEntity paymentEntity = paymentRepository.findById(paymentBody.getId()).get();
         paymentEntity.setInstallment(paymentBody.getInstallment());
@@ -191,20 +200,41 @@ public class PaymentService {
         return paymentDTOS;
     }
 
-    public List<PaymentSummaryDTO> paymentSummary(int mid,String dateFrom,String dateTo){
-         List<HouseEntity> houses = houseRepository.findByMid(mid);
+    public List<PaymentSummaryReportDTO> paymentSummary(int mid, String dateFrom, String dateTo) {
+//         List<HouseEntity> houses = houseRepository.findByMid(mid);
         Timestamp start = Timestamp.valueOf(dateFrom);
         Timestamp end = Timestamp.valueOf(dateTo);
-        List<PaymentSummaryDTO> payments = new ArrayList<>();
-         for(HouseEntity house:houses){
-           List<RentingHouseEntity>  rentings = rentingHouseRepository.findByHid(house.getHid());
-           for (RentingHouseEntity renting:rentings){
-            List<PaymentEntity> payment =   paymentRepository.findAllByRidAndPayHouseStatusAndInstallmentBetween(renting.getRid(),PayStatusEnum.Success_Status.getStatus(),start,end);
-               if(!payment.isEmpty()){
-                   payments.add( new PaymentSummaryDTO(house,payment));
-               }
-           }
-         }
+//        List<PaymentSummaryDTO> payments = new ArrayList<>();
+//         for(HouseEntity house:houses){
+//           List<RentingHouseEntity>  rentings = rentingHouseRepository.findByHid(house.getHid());
+//           for (RentingHouseEntity renting:rentings){
+//
+//               if(!payment.isEmpty()){
+//                   payments.add( new PaymentSummaryDTO(house,payment));
+//               }
+//           }
+//         }
+        List<Object[]> objects = paymentRepository.paymentSummary(mid, PayStatusEnum.Success_Status.getStatus(), start, end);
+//        Object o = objects.get(0);
+//        Object[] objectArray = objects.toArray();
+//        String[] stringArray = Arrays.copyOf(objectArray, objectArray.length, String[].class);
+//        System.out.println(stringArray[0]);
+
+        List<PaymentSummaryReportDTO> payments = new ArrayList<>();
+        try {
+            for (Object[] value : objects) {
+//                 payments.add(mapper.convertValue(value, PaymentSummaryReportDTO.class));
+//                System.out.println(value[0]);
+                payments.add(new PaymentSummaryReportDTO((String) value[0], (String) value[1], String.valueOf(value[2])));
+//                array[index] = (String) value[2];
+//                System.out.println(array[index]);
+//                index++;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return payments;
     }
 }
