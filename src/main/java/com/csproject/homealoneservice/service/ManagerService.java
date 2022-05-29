@@ -4,6 +4,7 @@ import com.csproject.homealoneservice.dao.ManagerRepository;
 import com.csproject.homealoneservice.dao.TenantRepository;
 import com.csproject.homealoneservice.dto.UploadFileDTO;
 import com.csproject.homealoneservice.entity.ManagerEntity;
+import com.csproject.homealoneservice.entity.TenantEntity;
 import com.csproject.homealoneservice.enumeration.ManagerEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -13,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -119,6 +122,19 @@ public class ManagerService {
         } else return null;
     }
 
+    public ManagerEntity  checkPhoneNumber(String phone){
+        List<ManagerEntity> tenantEntities = managerRepository.findAll();
+        ManagerEntity managerCheck = new ManagerEntity();
+        if(!phone.isEmpty()){
+            for (ManagerEntity manager:tenantEntities){
+                if(manager.getManagerPhone().equals(phone)){
+                    managerCheck = manager;
+                    break;
+                }
+            }
+        }
+        return managerCheck;
+    }
 
     public ManagerEntity saveManager(ManagerEntity managerBody) {
         ManagerEntity manager = new ManagerEntity();

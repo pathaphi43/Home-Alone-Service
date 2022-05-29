@@ -33,4 +33,20 @@ public class TenantController {
             return new ResponseEntity(result, HttpStatus.OK);
         }else return new ResponseEntity("สมัครสมาชิกไม่สำเร็จ ชื่อผู้ใช้ '"+ tenantBody.getTenantUsername() + "' อาจซ้ำกัน!!!", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+
+    @GetMapping(value = "check/id-card/{IDCard}")
+    public ResponseEntity<TenantEntity> checkIDCard(@PathVariable("IDCard") String IDCard){
+        return new ResponseEntity(tenantService.checkIDCard(IDCard),HttpStatus.OK);
+    }
+
+    @GetMapping(value = "check/phone/{phone}")
+    public ResponseEntity<TenantEntity> checkPhoneNumber(@PathVariable("phone") String phone){
+        return new ResponseEntity(tenantService.checkPhoneNumber(phone),HttpStatus.OK);
+    }
+
+    @GetMapping(value = "check/email/{email}")
+    public ResponseEntity<TenantEntity> checkEmail(@PathVariable("email") String email){
+        return new ResponseEntity(tenantService.checkEmail(email),HttpStatus.OK);
+    }
 }

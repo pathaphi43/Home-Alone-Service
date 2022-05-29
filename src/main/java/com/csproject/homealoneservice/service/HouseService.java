@@ -228,6 +228,10 @@ public class HouseService {
         return houseRepository.findAllByHouseProvinceAndHouseDistrict(province,amphure);
     }
 
+    public List<HouseEntity> findAllByhouseNameProvinceAmphureStatus(String houseName,String province, String district,int status) {
+        return houseRepository.findAllByHouseNameLikeAndHouseProvinceAndHouseDistrictAndHouseStatus(houseName,province,district,status);
+    }
+
 
     public List<HouseEntity> findAllByHouseStatusIs(int status) {
         return houseRepository.findAllByHouseStatusIs(status);

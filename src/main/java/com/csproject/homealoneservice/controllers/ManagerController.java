@@ -3,6 +3,7 @@ package com.csproject.homealoneservice.controllers;
 import com.csproject.homealoneservice.configurations.Configuration;
 import com.csproject.homealoneservice.dao.ManagerRepository;
 import com.csproject.homealoneservice.entity.ManagerEntity;
+import com.csproject.homealoneservice.entity.TenantEntity;
 import com.csproject.homealoneservice.service.FileUpload;
 import com.csproject.homealoneservice.service.ManagerService;
 import org.apache.logging.log4j.LogManager;
@@ -80,6 +81,9 @@ public class ManagerController {
        }else return new ResponseEntity("สมัครสมาชิกไม่สำเร็จ ชื่อผู้ใช้ '"+ managerBody.getManagerUsername() + "' อาจซ้ำกัน!!!", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-
+    @GetMapping(value = "check/phone/{phone}")
+    public ResponseEntity<TenantEntity> checkPhoneNumber(@PathVariable("phone") String phone){
+        return new ResponseEntity(managerService.checkPhoneNumber(phone),HttpStatus.OK);
+    }
 
 }

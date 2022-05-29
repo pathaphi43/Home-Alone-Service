@@ -98,4 +98,40 @@ public class UserController {
         return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+//    public TenantEntity findTenantByUsername(String username){
+//        TenantEntity tenant = tenantRepository.findByTenantUsername(username).get();
+//        return  tenant;
+//    }
+
+    @PostMapping(value = "/check-username",
+            consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<String> checkUsername(@RequestParam("username") String username){
+        if (!username.isEmpty() && managerService.findManager(username).isPresent()){
+            Optional<ManagerEntity> manager = managerService.findManager(username);
+            return new ResponseEntity<>(manager.get().getManagerUsername(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }else if (tenantService.findTenant(username).isPresent()){
+            Optional<TenantEntity> tenant = tenantService.findTenant(username);
+            return new ResponseEntity<>(tenant.get().getTenantUsername(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    @PostMapping(value = "/forgot-password",
+            consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<String> forgotPassword(@RequestParam("username") String username,@RequestParam("password") String newPassword){
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        if (!username.isEmpty() && managerService.findManager(username).isPresent()){
+            ManagerEntity manager = managerService.findManager(username).get();
+            manager.setManagerPassword(passwordEncoder.encode(newPassword));
+            return new ResponseEntity<>(manager.getManagerUsername(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }else if (tenantService.findTenant(username).isPresent()){
+            TenantEntity tenant = tenantService.findTenant(username).get();
+            tenant.setTenantPassword(passwordEncoder.encode(newPassword));
+            return new ResponseEntity<>(tenant.getTenantUsername(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+
+//        tenant.setTenantPassword(passwordEncoder.encode(newPassword));
+//        return tenantRepository.save(tenant);
+    }
+
 }

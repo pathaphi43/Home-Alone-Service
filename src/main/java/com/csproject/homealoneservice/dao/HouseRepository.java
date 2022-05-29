@@ -38,5 +38,7 @@ public interface HouseRepository extends JpaRepository<HouseEntity, Integer>,Hou
 //    List<HouseEntity> findByHouseNameAndHouseProvinceAndHouseDistrict(String name, String province, String district);
 
     List<HouseEntity> findAllByHouseProvinceAndHouseDistrict(String province, String district);
+
+    List<HouseEntity> findAllByHouseNameLikeAndHouseProvinceAndHouseDistrictAndHouseStatus(String houseName,String province, String district,int status);
     List<HouseEntity> findAllByHouseProvinceOrHouseDistrict(String province, String district);
 }

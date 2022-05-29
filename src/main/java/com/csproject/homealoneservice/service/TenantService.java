@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -91,5 +92,48 @@ public class TenantService {
         }else  return null;
     }
 
+
+    public TenantEntity  checkIDCard(String tenantIDCard){
+        List<TenantEntity> tenantEntities = tenantRepository.findAll();
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        TenantEntity tenantCheck = new TenantEntity();
+        if(!tenantIDCard.isEmpty()){
+            for (TenantEntity tenant:tenantEntities){
+                if(passwordEncoder.matches(tenantIDCard,tenant.getTenantIdCard())){
+                     tenantCheck = tenant;
+                     break;
+                }
+            }
+        }
+        return tenantCheck;
+    }
+
+    public TenantEntity  checkPhoneNumber(String phone){
+        List<TenantEntity> tenantEntities = tenantRepository.findAll();
+        TenantEntity tenantCheck = new TenantEntity();
+        if(!phone.isEmpty()){
+            for (TenantEntity tenant:tenantEntities){
+                if(tenant.getTenantPhone().equals(phone)){
+                    tenantCheck = tenant;
+                    break;
+                }
+            }
+        }
+        return tenantCheck;
+    }
+
+    public TenantEntity  checkEmail(String email){
+        List<TenantEntity> tenantEntities = tenantRepository.findAll();
+        TenantEntity tenantCheck = new TenantEntity();
+        if(!email.isEmpty()){
+            for (TenantEntity tenant:tenantEntities){
+                if(tenant.getTenantEmail().equals(email)){
+                    tenantCheck = tenant;
+                    break;
+                }
+            }
+        }
+        return tenantCheck;
+    }
 
 }
