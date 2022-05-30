@@ -7,6 +7,7 @@ import com.csproject.homealoneservice.dto.RentDTO;
 import com.csproject.homealoneservice.dto.UploadMultipartFileDTO;
 import com.csproject.homealoneservice.entity.HouseEntity;
 import com.csproject.homealoneservice.entity.RentingHouseEntity;
+import com.csproject.homealoneservice.prepare.PrepareData;
 import com.csproject.homealoneservice.service.HouseService;
 import com.csproject.homealoneservice.service.RentingHouseService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -177,7 +178,7 @@ public class HouseController {
     }
 
     @PostMapping(value = "/search-province-amphure-like",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<List<HouseEntity>> searchProvinceLikeOrAmphureLike(@RequestParam("houseName")@Nullable String houseName,@RequestParam("province")@Nullable String province,@RequestParam("amphure")@Nullable String amphure,@RequestParam("status")@Nullable int status){
+    public ResponseEntity<List<HouseEntity>> searchProvinceLikeOrAmphureLike(@RequestParam("province")@Nullable String province,@RequestParam("amphure")@Nullable String amphure){
         logger.info(province);
         logger.info(amphure);
        List<HouseEntity> house = houseService.findAllProvinceAndAmphureLike(province,amphure);
@@ -189,10 +190,45 @@ public class HouseController {
 
     @PostMapping(value = "/search-house",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<List<HouseEntity>> searchHouse(@RequestParam("houseName")@Nullable String houseName,@RequestParam("province")@Nullable String province,@RequestParam("amphure")@Nullable String amphure,@RequestParam("status")@Nullable int status){
-        List<HouseEntity> house = houseService.findAllByhouseNameProvinceAmphureStatus(houseName,province,amphure,status);
+        List<HouseEntity> house;
+        if(status == 0){
+            house = houseService.findAllByhouseNameProvinceAmphureStatus(houseName,province,amphure, PrepareData.getSearchStatusList1());
+       }else if(status == 1){
+           house = houseService.findAllByhouseNameProvinceAmphureStatus(houseName,province,amphure, PrepareData.getSearchStatusList2());
+       }else {
+            house = houseService.findAllByhouseNameProvinceAmphureStatus(houseName,province,amphure, PrepareData.getSearchStatusList3());
+       }
         if (!house.isEmpty()){
             return new ResponseEntity<>(house, HttpStatus.OK);
         }else {return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);}
+
+    }
+
+    @PostMapping(value = "/search-house-status",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<List<HouseEntity>> searchHouse(@RequestParam("houseName")@Nullable String houseName,@RequestParam("status")@Nullable String status){
+        List<HouseEntity> house= null;
+        List<Integer> StatusList = null;
+        if(status.equals("0")){
+            System.out.println(houseName);
+            System.out.println(PrepareData.getSearchStatusList1());
+            house = houseService.findAllByhouseNameAndStatusIn(houseName,PrepareData.getSearchStatusList1());
+            if (!house.isEmpty()){
+                return new ResponseEntity<>(house, HttpStatus.OK);
+            }else {return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);}
+        }else if(status.equals("1")){
+            StatusList = PrepareData.getSearchStatusList2();
+            house = houseService.findAllByhouseNameAndStatusIn(houseName,StatusList);
+            if (!house.isEmpty()){
+                return new ResponseEntity<>(house, HttpStatus.OK);
+            }else {return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);}
+        }else {
+            StatusList = PrepareData.getSearchStatusList3();
+            house = houseService.findAllByhouseNameAndStatusIn(houseName,StatusList);
+            if (!house.isEmpty()){
+                return new ResponseEntity<>(house, HttpStatus.OK);
+            }else {return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);}
+        }
+
 
     }
 

@@ -228,8 +228,12 @@ public class HouseService {
         return houseRepository.findAllByHouseProvinceAndHouseDistrict(province,amphure);
     }
 
-    public List<HouseEntity> findAllByhouseNameProvinceAmphureStatus(String houseName,String province, String district,int status) {
-        return houseRepository.findAllByHouseNameLikeAndHouseProvinceAndHouseDistrictAndHouseStatus(houseName,province,district,status);
+    public List<HouseEntity> findAllByhouseNameProvinceAmphureStatus(String houseName,String province, String district,List<Integer> status) {
+        return houseRepository.findAll(HouseSpecification.houseNameLikeAndProvinceAndAmphureAndStatus(houseName,province,district,status));
+    }
+
+    public List<HouseEntity> findAllByhouseNameAndStatusIn(String houseName,List<Integer> status) {
+        return houseRepository.findAll(HouseSpecification.houseNameLike(houseName,status));
     }
 
 
