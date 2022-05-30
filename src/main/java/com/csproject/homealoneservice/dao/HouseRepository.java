@@ -23,7 +23,7 @@ public interface HouseRepository extends JpaRepository<HouseEntity, Integer>,Hou
 
     List<HouseEntity> findByMid(int id);
 
-    List<HouseEntity> findAllByHouseStatusIsOrdOrderByHidDesc(Integer status);
+    List<HouseEntity> findAllByHouseStatusIsOrderByHidDesc(Integer status);
 
     List<HouseEntity> findAllByHouseStatusIsNot(Integer status);
 
