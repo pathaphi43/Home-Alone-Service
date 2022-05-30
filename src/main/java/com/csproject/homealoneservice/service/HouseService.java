@@ -59,7 +59,7 @@ public class HouseService {
 
     public List<HouseDTO> queryAllHouseAndImageAndStatus(){
         List<HouseDTO> houseDTO = new ArrayList<>();
-        List<HouseEntity> houses = houseRepository.findAllByHouseStatusIs(HouseEnum.HOUSE_FIRST_INSERT.getStatus());
+        List<HouseEntity> houses = houseRepository.findAllByHouseStatusIsOrdOrderByHidDesc(HouseEnum.HOUSE_FIRST_INSERT.getStatus());
         for (HouseEntity house:houses){
             houseDTO.add(new HouseDTO(house.getHid(),house.getMid(),house.getHouseName(),house.getHouseAddress(),house.getHouseProvince(),house.getHouseDistrict(),house.getHouseZipcode(),
                     house.getHouseImage(),house.getHouseType(),house.getHouseFloors(),house.getHouseBedroom(),house.getHouseBathroom(),house.getHouseLivingroom(),house.getHouseKitchen(),house.getHouseArea(),
@@ -243,7 +243,7 @@ public class HouseService {
 
 
     public List<HouseEntity> findAllByHouseStatusIs(int status) {
-        return houseRepository.findAllByHouseStatusIs(status);
+        return houseRepository.findAllByHouseStatusIsOrdOrderByHidDesc(status);
     }
 
     public List<HouseEntity> findAllByHouseStatusIsNot(int status) {
