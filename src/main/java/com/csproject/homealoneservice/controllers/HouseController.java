@@ -204,6 +204,22 @@ public class HouseController {
 
     }
 
+    @PostMapping(value = "/search-house-provice",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<List<HouseEntity>> searchHouse(@RequestParam("houseName")@Nullable String houseName,@RequestParam("province")@Nullable String province,@RequestParam("status")@Nullable int status){
+        List<HouseEntity> house;
+        if(status == 0){
+            house = houseService.findAllByhouseNameProvinceStatus(houseName,province, PrepareData.getSearchStatusList1());
+        }else if(status == 1){
+            house = houseService.findAllByhouseNameProvinceStatus(houseName,province,PrepareData.getSearchStatusList2());
+        }else {
+            house = houseService.findAllByhouseNameProvinceStatus(houseName,province, PrepareData.getSearchStatusList3());
+        }
+        if (!house.isEmpty()){
+            return new ResponseEntity<>(house, HttpStatus.OK);
+        }else {return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);}
+
+    }
+
     @PostMapping(value = "/search-house-status",consumes ={MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE} ,produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<List<HouseEntity>> searchHouse(@RequestParam("houseName")@Nullable String houseName,@RequestParam("status")@Nullable String status){
         List<HouseEntity> house= null;

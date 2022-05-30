@@ -48,4 +48,14 @@ public interface HouseSpecification<T> {
                 );
 
     }
+
+    static Specification<HouseEntity> houseNameLikeAndProvinceAndStatusIn(String houseName,String province,String amphure, List<Integer> status) {
+        return (root, cq, cb) ->
+                cb.and(
+                        cb.like(root.get("houseName"), "%" + houseName + "%"),
+                        cb.in(root.get("houseStatus")).value(status),
+                        cb.like(root.get("houseProvince"), "%" + province + "%")
+                );
+
+    }
 }

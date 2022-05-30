@@ -232,6 +232,11 @@ public class HouseService {
         return houseRepository.findAll(HouseSpecification.houseNameLikeAndProvinceAndAmphureAndStatus(houseName,province,district,status));
     }
 
+    public List<HouseEntity> findAllByhouseNameProvinceStatus(String houseName,String province,List<Integer> status) {
+        return houseRepository.findAll(HouseSpecification.houseNameLikeAndProvinceAndStatus(houseName,province,status));
+    }
+
+
     public List<HouseEntity> findAllByhouseNameAndStatusIn(String houseName,List<Integer> status) {
         return houseRepository.findAll(HouseSpecification.houseNameLike(houseName,status));
     }
