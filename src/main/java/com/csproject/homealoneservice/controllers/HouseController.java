@@ -60,6 +60,15 @@ public class HouseController {
         return new ResponseEntity(house, HttpStatus.OK);
     }
 
+    @GetMapping("/house-name/{name}")
+    public ResponseEntity<HouseEntity> findByHouseName(@PathVariable("name") String name){
+        HouseEntity house = houseService.findByHouseName(name);
+        if(house != null){
+            return new ResponseEntity(house, HttpStatus.OK);
+        }else  return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
+
+    }
+
     @GetMapping("/HouseAndImage/{id}")
     public ResponseEntity<List<HouseDTO>> findHouseAndImages(@PathVariable("id") int id){
         return new ResponseEntity(houseService.queryHouseAndImage(id), HttpStatus.OK);

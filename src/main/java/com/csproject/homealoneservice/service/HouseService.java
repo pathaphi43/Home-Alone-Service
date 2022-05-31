@@ -45,6 +45,9 @@ public class HouseService {
                 HouseEntity.class).setMaxResults(limit).getResultList();
     }
 
+    public  HouseEntity findByHouseName(String name){
+        return houseRepository.findByHouseName(name);
+    }
     public List<HouseDTO> queryAllHouseAndImage(){
         List<HouseDTO> houseDTO = new ArrayList<>();
         Iterable<HouseEntity> houses= queryAllHouse();
