@@ -46,7 +46,7 @@ public class HouseService {
     }
 
     public  HouseEntity findByHouseName(String name){
-        return houseRepository.findByHouseName(name);
+        return houseRepository.findTopByHouseName(name);
     }
     public List<HouseDTO> queryAllHouseAndImage(){
         List<HouseDTO> houseDTO = new ArrayList<>();
