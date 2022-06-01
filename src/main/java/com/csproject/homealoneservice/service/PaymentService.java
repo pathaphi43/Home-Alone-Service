@@ -215,17 +215,13 @@ public class PaymentService {
 //           }
 //         }
         List<Object[]> objects = paymentRepository.paymentSummary(mid, PayStatusEnum.Success_Status.getStatus(), start, end);
-//        Object o = objects.get(0);
-//        Object[] objectArray = objects.toArray();
-//        String[] stringArray = Arrays.copyOf(objectArray, objectArray.length, String[].class);
-//        System.out.println(stringArray[0]);
 
         List<PaymentSummaryReportDTO> payments = new ArrayList<>();
         try {
             for (Object[] value : objects) {
 //                 payments.add(mapper.convertValue(value, PaymentSummaryReportDTO.class));
 //                System.out.println(value[0]);
-                payments.add(new PaymentSummaryReportDTO((String) value[0], (String) value[1], String.valueOf(value[2])));
+                payments.add(new PaymentSummaryReportDTO((String) value[0], String.valueOf(value[1])));
 //                array[index] = (String) value[2];
 //                System.out.println(array[index]);
 //                index++;

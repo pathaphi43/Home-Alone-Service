@@ -20,6 +20,11 @@ public class PaymentSummaryReportDTO {
         this.summaryAmount = summaryAmount;
     }
 
+    public PaymentSummaryReportDTO(String houseName, String summaryAmount) {
+        this.houseName = houseName;
+        this.summaryAmount = summaryAmount;
+    }
+
     public String getSummaryAmount() {
         return summaryAmount;
     }
