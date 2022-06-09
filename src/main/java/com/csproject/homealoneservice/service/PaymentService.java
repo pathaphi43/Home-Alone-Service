@@ -201,30 +201,15 @@ public class PaymentService {
     }
 
     public List<PaymentSummaryReportDTO> paymentSummary(int mid, String dateFrom, String dateTo) {
-//         List<HouseEntity> houses = houseRepository.findByMid(mid);
         Timestamp start = Timestamp.valueOf(dateFrom);
         Timestamp end = Timestamp.valueOf(dateTo);
-//        List<PaymentSummaryDTO> payments = new ArrayList<>();
-//         for(HouseEntity house:houses){
-//           List<RentingHouseEntity>  rentings = rentingHouseRepository.findByHid(house.getHid());
-//           for (RentingHouseEntity renting:rentings){
-//
-//               if(!payment.isEmpty()){
-//                   payments.add( new PaymentSummaryDTO(house,payment));
-//               }
-//           }
-//         }
+
         List<Object[]> objects = paymentRepository.paymentSummary(mid, PayStatusEnum.Success_Status.getStatus(), start, end);
 
         List<PaymentSummaryReportDTO> payments = new ArrayList<>();
         try {
             for (Object[] value : objects) {
-//                 payments.add(mapper.convertValue(value, PaymentSummaryReportDTO.class));
-//                System.out.println(value[0]);
                 payments.add(new PaymentSummaryReportDTO((String) value[0], String.valueOf(value[1])));
-//                array[index] = (String) value[2];
-//                System.out.println(array[index]);
-//                index++;
             }
 
         } catch (Exception e) {
