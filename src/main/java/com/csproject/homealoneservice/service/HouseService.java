@@ -4,10 +4,10 @@ import com.csproject.homealoneservice.dao.*;
 import com.csproject.homealoneservice.dto.HouseDTO;
 import com.csproject.homealoneservice.dto.UploadFileDTO;
 import com.csproject.homealoneservice.dto.UploadMultipartFileDTO;
-import com.csproject.homealoneservice.entity.HouseEntity;
-import com.csproject.homealoneservice.entity.RentalHouseImageEntity;
-import com.csproject.homealoneservice.entity.RentingHouseEntity;
+import com.csproject.homealoneservice.entity.*;
 import com.csproject.homealoneservice.enumeration.HouseEnum;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.mysql.cj.Session;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,13 +17,13 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Table;
 import java.awt.print.Pageable;
 import java.lang.management.MemoryUsage;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class HouseService {
@@ -37,6 +37,9 @@ public class HouseService {
     @Autowired
     FileUpload fileUpload;
 
+    @Autowired
+    BankAccountRepository bankAccountRepository;
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -45,73 +48,105 @@ public class HouseService {
                 HouseEntity.class).setMaxResults(limit).getResultList();
     }
 
-    public  HouseEntity findByHouseName(String name){
-        return houseRepository.findTopByHouseName(name);
-    }
-    public List<HouseDTO> queryAllHouseAndImage(){
-        List<HouseDTO> houseDTO = new ArrayList<>();
-        Iterable<HouseEntity> houses= queryAllHouse();
-        for (HouseEntity house:houses){
-           houseDTO.add(new HouseDTO(house.getHid(),house.getMid(),house.getHouseName(),house.getHouseAddress(),house.getHouseProvince(),house.getHouseDistrict(),house.getHouseZipcode(),
-                   house.getHouseImage(),house.getHouseType(),house.getHouseFloors(),house.getHouseBedroom(),house.getHouseBathroom(),house.getHouseLivingroom(),house.getHouseKitchen(),house.getHouseArea(),
-                   house.getHouseLatitude(),house.getHouseLongitude(),house.getHouseElectric(),house.getHouseWater(),house.getHouseRent(),house.getHouseDeposit(),house.getHouseInsurance(),house.getHouseStatus(),
-                   rentalHouseImageRepository.findByHid(house.getHid())));
-        }
-        return houseDTO;
+    public Map<String, String> test() {
+        HouseEntity house = new HouseEntity();
+        ManagerEntity manager = new ManagerEntity();
+        house.setHouseAddress("sadasd");
+        house.setHouseName("dasgadsg");
+        manager.setManagerPassword("fgsdgsfdg");
+        List<Object> objects = new ArrayList<>();
+        objects.add(house);
+        objects.add(manager);
+        return getObjectAsString(objects);
     }
 
-    public List<HouseDTO> queryAllHouseAndImageAndStatus(){
+    public Map<String, String> getObjectAsString(List<Object> objects) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            Map<String, String> map = new HashMap<>();
+            for (Object o : objects) {
+                Table table = o.getClass().getAnnotation(Table.class);
+                String s = mapper.writeValueAsString(o);
+                map.put(table.name(), s);
+            }
+            BankAccountEntity bankAccountEntity = new BankAccountEntity();
+            bankAccountEntity.setBankName(map.toString());
+            bankAccountEntity.setMid(1);
+            bankAccountRepository.save(bankAccountEntity);
+            return map;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public HouseEntity findByHouseName(String name) {
+        return houseRepository.findTopByHouseName(name);
+    }
+
+    public List<HouseDTO> queryAllHouseAndImage() {
         List<HouseDTO> houseDTO = new ArrayList<>();
-        List<HouseEntity> houses = houseRepository.findAllByHouseStatusIsOrderByHidDesc(HouseEnum.HOUSE_FIRST_INSERT.getStatus());
-        for (HouseEntity house:houses){
-            houseDTO.add(new HouseDTO(house.getHid(),house.getMid(),house.getHouseName(),house.getHouseAddress(),house.getHouseProvince(),house.getHouseDistrict(),house.getHouseZipcode(),
-                    house.getHouseImage(),house.getHouseType(),house.getHouseFloors(),house.getHouseBedroom(),house.getHouseBathroom(),house.getHouseLivingroom(),house.getHouseKitchen(),house.getHouseArea(),
-                    house.getHouseLatitude(),house.getHouseLongitude(),house.getHouseElectric(),house.getHouseWater(),house.getHouseRent(),house.getHouseDeposit(),house.getHouseInsurance(),house.getHouseStatus(),
+        Iterable<HouseEntity> houses = queryAllHouse();
+        for (HouseEntity house : houses) {
+            houseDTO.add(new HouseDTO(house.getHid(), house.getMid(), house.getHouseName(), house.getHouseAddress(), house.getHouseProvince(), house.getHouseDistrict(), house.getHouseZipcode(),
+                    house.getHouseImage(), house.getHouseType(), house.getHouseFloors(), house.getHouseBedroom(), house.getHouseBathroom(), house.getHouseLivingroom(), house.getHouseKitchen(), house.getHouseArea(),
+                    house.getHouseLatitude(), house.getHouseLongitude(), house.getHouseElectric(), house.getHouseWater(), house.getHouseRent(), house.getHouseDeposit(), house.getHouseInsurance(), house.getHouseStatus(),
                     rentalHouseImageRepository.findByHid(house.getHid())));
         }
         return houseDTO;
     }
 
-    public UploadMultipartFileDTO saveImage(int hid,MultipartFile[] file){
-        ResponseEntity<UploadMultipartFileDTO> response = fileUpload.uploadMultipartFile(file,hid);
-        if(response != null){
-            RentalHouseImageEntity houseImage ;
-        for (String path:response.getBody().getImgPath()){
-            houseImage = new RentalHouseImageEntity();
-            houseImage.setImageHousePath(path);
-            houseImage.setHid(hid);
-            rentalHouseImageRepository.save(houseImage);
+    public List<HouseDTO> queryAllHouseAndImageAndStatus() {
+        List<HouseDTO> houseDTO = new ArrayList<>();
+        List<HouseEntity> houses = houseRepository.findAllByHouseStatusIsOrderByHidDesc(HouseEnum.HOUSE_FIRST_INSERT.getStatus());
+        for (HouseEntity house : houses) {
+            houseDTO.add(new HouseDTO(house.getHid(), house.getMid(), house.getHouseName(), house.getHouseAddress(), house.getHouseProvince(), house.getHouseDistrict(), house.getHouseZipcode(),
+                    house.getHouseImage(), house.getHouseType(), house.getHouseFloors(), house.getHouseBedroom(), house.getHouseBathroom(), house.getHouseLivingroom(), house.getHouseKitchen(), house.getHouseArea(),
+                    house.getHouseLatitude(), house.getHouseLongitude(), house.getHouseElectric(), house.getHouseWater(), house.getHouseRent(), house.getHouseDeposit(), house.getHouseInsurance(), house.getHouseStatus(),
+                    rentalHouseImageRepository.findByHid(house.getHid())));
+        }
+        return houseDTO;
+    }
+
+    public UploadMultipartFileDTO saveImage(int hid, MultipartFile[] file) {
+        ResponseEntity<UploadMultipartFileDTO> response = fileUpload.uploadMultipartFile(file, hid);
+        if (response != null) {
+            RentalHouseImageEntity houseImage;
+            for (String path : response.getBody().getImgPath()) {
+                houseImage = new RentalHouseImageEntity();
+                houseImage.setImageHousePath(path);
+                houseImage.setHid(hid);
+                rentalHouseImageRepository.save(houseImage);
             }
         }
         return response.getBody();
     }
 
-    public HouseDTO queryHouseAndImageByhid(Integer hid){
+    public HouseDTO queryHouseAndImageByhid(Integer hid) {
         HouseEntity house = houseRepository.findById(hid).get();
-        HouseDTO houseDTO = new HouseDTO(house.getHid(),house.getMid(),house.getHouseName(),house.getHouseAddress(),house.getHouseProvince(),house.getHouseDistrict(),house.getHouseZipcode(),
-                    house.getHouseImage(),house.getHouseType(),house.getHouseFloors(),house.getHouseBedroom(),house.getHouseBathroom(),house.getHouseLivingroom(),house.getHouseKitchen(),house.getHouseArea(),
-                    house.getHouseLatitude(),house.getHouseLongitude(),house.getHouseElectric(),house.getHouseWater(),house.getHouseRent(),house.getHouseDeposit(),house.getHouseInsurance(),house.getHouseStatus(),
-                    rentalHouseImageRepository.findByHid(house.getHid()));
+        HouseDTO houseDTO = new HouseDTO(house.getHid(), house.getMid(), house.getHouseName(), house.getHouseAddress(), house.getHouseProvince(), house.getHouseDistrict(), house.getHouseZipcode(),
+                house.getHouseImage(), house.getHouseType(), house.getHouseFloors(), house.getHouseBedroom(), house.getHouseBathroom(), house.getHouseLivingroom(), house.getHouseKitchen(), house.getHouseArea(),
+                house.getHouseLatitude(), house.getHouseLongitude(), house.getHouseElectric(), house.getHouseWater(), house.getHouseRent(), house.getHouseDeposit(), house.getHouseInsurance(), house.getHouseStatus(),
+                rentalHouseImageRepository.findByHid(house.getHid()));
         return houseDTO;
     }
 
-    public void deleteImageByPid(int pid){
-         rentalHouseImageRepository.deleteById(pid);
+    public void deleteImageByPid(int pid) {
+        rentalHouseImageRepository.deleteById(pid);
     }
 
-    public List<HouseDTO> queryAllHouseAndImageAndStatusIs(Integer mid,Integer status){
+    public List<HouseDTO> queryAllHouseAndImageAndStatusIs(Integer mid, Integer status) {
         List<HouseDTO> houseDTO = new ArrayList<>();
-        List<HouseEntity> houses = houseRepository.findAllByMidAndHouseStatusIs(mid,status);
-        for (HouseEntity house:houses){
-            houseDTO.add(new HouseDTO(house.getHid(),house.getMid(),house.getHouseName(),house.getHouseAddress(),house.getHouseProvince(),house.getHouseDistrict(),house.getHouseZipcode(),
-                    house.getHouseImage(),house.getHouseType(),house.getHouseFloors(),house.getHouseBedroom(),house.getHouseBathroom(),house.getHouseLivingroom(),house.getHouseKitchen(),house.getHouseArea(),
-                    house.getHouseLatitude(),house.getHouseLongitude(),house.getHouseElectric(),house.getHouseWater(),house.getHouseRent(),house.getHouseDeposit(),house.getHouseInsurance(),house.getHouseStatus(),
+        List<HouseEntity> houses = houseRepository.findAllByMidAndHouseStatusIs(mid, status);
+        for (HouseEntity house : houses) {
+            houseDTO.add(new HouseDTO(house.getHid(), house.getMid(), house.getHouseName(), house.getHouseAddress(), house.getHouseProvince(), house.getHouseDistrict(), house.getHouseZipcode(),
+                    house.getHouseImage(), house.getHouseType(), house.getHouseFloors(), house.getHouseBedroom(), house.getHouseBathroom(), house.getHouseLivingroom(), house.getHouseKitchen(), house.getHouseArea(),
+                    house.getHouseLatitude(), house.getHouseLongitude(), house.getHouseElectric(), house.getHouseWater(), house.getHouseRent(), house.getHouseDeposit(), house.getHouseInsurance(), house.getHouseStatus(),
                     rentalHouseImageRepository.findByHid(house.getHid())));
         }
         return houseDTO;
     }
 
-    public  HouseEntity insertHouse(HouseEntity houseBody, @Nullable MultipartFile file){
+    public HouseEntity insertHouse(HouseEntity houseBody, @Nullable MultipartFile file) {
         HouseEntity house = new HouseEntity();
         house.setMid(houseBody.getMid());
         house.setHouseName(houseBody.getHouseName());
@@ -119,11 +154,11 @@ public class HouseService {
         house.setHouseProvince(houseBody.getHouseProvince());
         house.setHouseDistrict(houseBody.getHouseDistrict());
         house.setHouseZipcode(house.getHouseZipcode());
-        ResponseEntity<UploadFileDTO> response = null ;
-        if(file != null){
+        ResponseEntity<UploadFileDTO> response = null;
+        if (file != null) {
             response = fileUpload.uploadProfile(file);
         }
-        if(response != null) house.setHouseImage(response.getBody().getImgPath());
+        if (response != null) house.setHouseImage(response.getBody().getImgPath());
         else house.setHouseImage(HouseEnum.HOUSE_FIRST_INSERT.getImagePath());
         house.setHouseType(houseBody.getHouseType());
         house.setHouseFloors(houseBody.getHouseFloors());
@@ -143,7 +178,7 @@ public class HouseService {
         return houseRepository.save(house);
     }
 
-    public  HouseEntity editHouse(HouseEntity houseBody, @Nullable MultipartFile file){
+    public HouseEntity editHouse(HouseEntity houseBody, @Nullable MultipartFile file) {
         HouseEntity house = new HouseEntity();
         house.setHid(houseBody.getHid());
         house.setMid(houseBody.getMid());
@@ -152,11 +187,11 @@ public class HouseService {
         house.setHouseProvince(houseBody.getHouseProvince());
         house.setHouseDistrict(houseBody.getHouseDistrict());
         house.setHouseZipcode(house.getHouseZipcode());
-        ResponseEntity<UploadFileDTO> response = null ;
-        if(file != null){
+        ResponseEntity<UploadFileDTO> response = null;
+        if (file != null) {
             response = fileUpload.uploadProfile(file);
         }
-        if(response != null) house.setHouseImage(response.getBody().getImgPath());
+        if (response != null) house.setHouseImage(response.getBody().getImgPath());
         else house.setHouseImage(houseBody.getHouseImage());
         house.setHouseType(houseBody.getHouseType());
         house.setHouseFloors(houseBody.getHouseFloors());
@@ -176,10 +211,10 @@ public class HouseService {
         return houseRepository.save(house);
     }
 
-    public HouseDTO queryHouseAndImage(Integer id){
+    public HouseDTO queryHouseAndImage(Integer id) {
         HouseDTO houseDTO = new HouseDTO();
         Optional<HouseEntity> houses = findById(id);
-        if(houses.isPresent()){
+        if (houses.isPresent()) {
             houseDTO.setHid(houses.get().getHid());
             houseDTO.setMid(houses.get().getMid());
             houseDTO.setHouseName(houses.get().getHouseName());
@@ -205,13 +240,14 @@ public class HouseService {
             houseDTO.setHouseStatus(houses.get().getHouseStatus());
             houseDTO.setHouseImageList(rentalHouseImageRepository.findByHid(houses.get().getHid()));
             return houseDTO;
-        }else return null;
-
+        } else return null;
     }
 
-    public Optional<HouseEntity> findById(Integer id){return houseRepository.findById(id);}
+    public Optional<HouseEntity> findById(Integer id) {
+        return houseRepository.findById(id);
+    }
 
-    public List<HouseEntity> findByHouseId(Integer id){
+    public List<HouseEntity> findByHouseId(Integer id) {
         return houseRepository.findByMid(id);
     }
 
@@ -223,25 +259,25 @@ public class HouseService {
         return houseRepository.findAll(HouseSpecification.likeHouseName(name));
     }
 
-    public List<HouseEntity> findAllProvinceAndAmphureLike(String province,String amphure) {
-        return houseRepository.findAll(HouseSpecification.likeprovinceOramphure(province,amphure));
+    public List<HouseEntity> findAllProvinceAndAmphureLike(String province, String amphure) {
+        return houseRepository.findAll(HouseSpecification.likeprovinceOramphure(province, amphure));
     }
 
-    public List<HouseEntity> findAllProvinceAndAmphure(String province,String amphure) {
-        return houseRepository.findAllByHouseProvinceAndHouseDistrict(province,amphure);
+    public List<HouseEntity> findAllProvinceAndAmphure(String province, String amphure) {
+        return houseRepository.findAllByHouseProvinceAndHouseDistrict(province, amphure);
     }
 
-    public List<HouseEntity> findAllByhouseNameProvinceAmphureStatus(String houseName,String province, String district,List<Integer> status) {
-        return houseRepository.findAll(HouseSpecification.houseNameLikeAndProvinceAndAmphureAndStatus(houseName,province,district,status));
+    public List<HouseEntity> findAllByhouseNameProvinceAmphureStatus(String houseName, String province, String district, List<Integer> status) {
+        return houseRepository.findAll(HouseSpecification.houseNameLikeAndProvinceAndAmphureAndStatus(houseName, province, district, status));
     }
 
-    public List<HouseEntity> findAllByhouseNameProvinceStatus(String houseName,String province,List<Integer> status) {
-        return houseRepository.findAll(HouseSpecification.houseNameLikeAndProvinceAndStatus(houseName,province,status));
+    public List<HouseEntity> findAllByhouseNameProvinceStatus(String houseName, String province, List<Integer> status) {
+        return houseRepository.findAll(HouseSpecification.houseNameLikeAndProvinceAndStatus(houseName, province, status));
     }
 
 
-    public List<HouseEntity> findAllByhouseNameAndStatusIn(String houseName,List<Integer> status) {
-        return houseRepository.findAll(HouseSpecification.houseNameLike(houseName,status));
+    public List<HouseEntity> findAllByhouseNameAndStatusIn(String houseName, List<Integer> status) {
+        return houseRepository.findAll(HouseSpecification.houseNameLike(houseName, status));
     }
 
 
@@ -253,21 +289,21 @@ public class HouseService {
         return houseRepository.findAllByHouseStatusIsNot(status);
     }
 
-    public HouseEntity dismissHouseByHid(Integer hid){
-       HouseEntity house = houseRepository.findById(hid).get();
-       house.setHouseStatus(HouseEnum.House_Dismiss.getStatus());
-       return houseRepository.save(house);
+    public HouseEntity dismissHouseByHid(Integer hid) {
+        HouseEntity house = houseRepository.findById(hid).get();
+        house.setHouseStatus(HouseEnum.House_Dismiss.getStatus());
+        return houseRepository.save(house);
     }
 
-    public void deleteHouseByHid(Integer hid){
-     houseRepository.deleteById(hid);
+    public void deleteHouseByHid(Integer hid) {
+        houseRepository.deleteById(hid);
     }
 
 
-    public HouseEntity rentHouse(Integer id){
+    public HouseEntity rentHouse(Integer id) {
         HouseEntity house = new HouseEntity();
         house.setHid(id);
-        Optional<HouseEntity> houseEntity= findById(id);
+        Optional<HouseEntity> houseEntity = findById(id);
         house.setMid(houseEntity.get().getMid());
         house.setHouseName(houseEntity.get().getHouseName());
         house.setHouseAddress(houseEntity.get().getHouseAddress());

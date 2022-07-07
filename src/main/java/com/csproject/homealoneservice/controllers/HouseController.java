@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/house")
@@ -38,6 +39,9 @@ public class HouseController {
 
     @GetMapping("")
     public String show() {return "Spring boot service";};
+
+    @GetMapping("test")
+    public Map<String,String> showTest() {return houseService.test();};
 
     @GetMapping("/all")
     public Iterable<HouseEntity> findAllHouse() {
