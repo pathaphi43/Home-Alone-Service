@@ -19,7 +19,7 @@ public class Controller {
         System.out.println(request.getRemotePort());
         System.out.println(request.getRemoteAddr());
         System.out.println(getClientIpAddressIfServletRequestExist());
-        return "Home Alone Web Service";
+        return "Home Alone Web Service : "+getClientIpAddressIfServletRequestExist();
     }
 
     private static final String[] IP_HEADER_CANDIDATES = {
@@ -37,7 +37,6 @@ public class Controller {
     };
 
     public static String getClientIpAddressIfServletRequestExist() {
-
         if (RequestContextHolder.getRequestAttributes() == null) {
             return "0.0.0.0";
         }
